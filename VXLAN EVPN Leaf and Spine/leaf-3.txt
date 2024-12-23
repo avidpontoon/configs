@@ -1,0 +1,348 @@
+hostname leaf-3
+vdc leaf-3 id 1
+limit-resource vlan minimum 16 maximum 4094
+limit-resource vrf minimum 2 maximum 4096
+limit-resource port-channel minimum 0 maximum 511
+limit-resource u4route-mem minimum 248 maximum 248
+limit-resource u6route-mem minimum 96 maximum 96
+limit-resource m4route-mem minimum 58 maximum 58
+limit-resource m6route-mem minimum 8 maximum 8
+
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature fabric forwarding
+feature interface-vlan
+feature vn-segment-vlan-based
+feature nv overlay
+
+no password strength-check
+username cisco passphrase  lifetime 99999 warntime 14 gracetime 3
+ip domain-lookup
+copp profile strict
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+fabric forwarding anycast-gateway-mac aaaa.bbbb.cccc
+ip pim rp-address 10.0.0.99 group-list 224.0.0.0/4
+ip pim ssm range 232.0.0.0/8
+vlan 1,10,20,500,555,600,998-999
+vlan 10
+vn-segment 100010
+vlan 20
+vn-segment 100020
+vlan 555
+vn-segment 100555
+vlan 600
+name EXTERNAL-TEN2
+vlan 998
+vn-segment 100998
+vlan 999
+vn-segment 100999
+
+ip prefix-list default-route seq 5 permit 0.0.0.0/0
+ip extcommunity-list standard vl998 permit rt 64500:100998
+ip extcommunity-list standard vl999 permit rt 64500:100999
+route-map deny-default deny 10
+match ip address prefix-list default-route
+route-map deny-default permit 20
+route-map external-tenant1-out deny 10
+match ip address prefix-list default-route
+route-map external-tenant1-out permit 20
+match extcommunity vl999
+route-map external-tenant2-out deny 10
+match ip address prefix-list default-route
+route-map external-tenant2-out permit 20
+match extcommunity vl998
+vrf context OVERLAY-TENANT1
+vni 100999
+ip route 0.0.0.0/0 Null0
+rd auto
+address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+    route-target import 64500:100555
+    route-target import 64500:100998
+    route-target import 64500:100998 evpn
+vrf context OVERLAY-TENANT2
+vni 100998
+ip route 0.0.0.0/0 Null0
+rd auto
+address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+    route-target import 64500:100555
+    route-target import 64500:100999
+    route-target import 64500:100999 evpn
+vrf context external
+vni 100555
+rd auto
+address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+    route-target import 64500:100998
+    route-target import 64500:100998 evpn
+    route-target import 64500:100999
+    route-target import 64500:100999 evpn
+vrf context management
+hardware access-list tcam region vpc-convergence 0
+hardware access-list tcam region arp-ether 256
+
+
+interface Vlan1
+
+interface Vlan10
+no shutdown
+vrf member OVERLAY-TENANT1
+ip address 10.10.1.254/24
+fabric forwarding mode anycast-gateway
+
+interface Vlan20
+no shutdown
+vrf member OVERLAY-TENANT2
+ip address 10.20.1.254/24
+fabric forwarding mode anycast-gateway
+
+interface Vlan555
+no shutdown
+vrf member external
+ip forward
+
+interface Vlan998
+no shutdown
+vrf member OVERLAY-TENANT2
+ip forward
+
+interface Vlan999
+no shutdown
+vrf member OVERLAY-TENANT1
+ip forward
+
+interface nve1
+no shutdown
+host-reachability protocol bgp
+source-interface loopback0
+member vni 100010
+    suppress-arp
+    mcast-group 224.1.1.192
+member vni 100020
+    suppress-arp
+    mcast-group 224.1.1.192
+member vni 100555 associate-vrf
+member vni 100998 associate-vrf
+member vni 100999 associate-vrf
+
+interface Ethernet1/1
+no switchport
+mtu 9216
+medium p2p
+ip unnumbered loopback0
+ip router ospf UNDERLAY area 0.0.0.0
+ip pim sparse-mode
+no shutdown
+
+interface Ethernet1/2
+no switchport
+mtu 9216
+medium p2p
+ip unnumbered loopback0
+ip router ospf UNDERLAY area 0.0.0.0
+ip pim sparse-mode
+no shutdown
+
+interface Ethernet1/3
+switchport access vlan 10
+
+interface Ethernet1/4
+switchport access vlan 20
+
+interface Ethernet1/5
+no switchport
+vrf member external
+ip address 10.1.50.1/30
+no shutdown
+
+interface Ethernet1/6
+
+interface Ethernet1/7
+
+interface Ethernet1/8
+
+interface Ethernet1/9
+
+interface Ethernet1/10
+
+interface Ethernet1/11
+
+interface Ethernet1/12
+
+interface Ethernet1/13
+
+interface Ethernet1/14
+
+interface Ethernet1/15
+
+interface Ethernet1/16
+
+interface Ethernet1/17
+
+interface Ethernet1/18
+
+interface Ethernet1/19
+
+interface Ethernet1/20
+
+interface Ethernet1/21
+
+interface Ethernet1/22
+
+interface Ethernet1/23
+
+interface Ethernet1/24
+
+interface Ethernet1/25
+
+interface Ethernet1/26
+
+interface Ethernet1/27
+
+interface Ethernet1/28
+
+interface Ethernet1/29
+
+interface Ethernet1/30
+
+interface Ethernet1/31
+
+interface Ethernet1/32
+
+interface Ethernet1/33
+
+interface Ethernet1/34
+
+interface Ethernet1/35
+
+interface Ethernet1/36
+
+interface Ethernet1/37
+
+interface Ethernet1/38
+
+interface Ethernet1/39
+
+interface Ethernet1/40
+
+interface Ethernet1/41
+
+interface Ethernet1/42
+
+interface Ethernet1/43
+
+interface Ethernet1/44
+
+interface Ethernet1/45
+
+interface Ethernet1/46
+
+interface Ethernet1/47
+
+interface Ethernet1/48
+
+interface Ethernet1/49
+
+interface Ethernet1/50
+
+interface Ethernet1/51
+
+interface Ethernet1/52
+
+interface Ethernet1/53
+
+interface Ethernet1/54
+
+interface Ethernet1/55
+
+interface Ethernet1/56
+
+interface Ethernet1/57
+
+interface Ethernet1/58
+
+interface Ethernet1/59
+
+interface Ethernet1/60
+
+interface Ethernet1/61
+
+interface Ethernet1/62
+
+interface Ethernet1/63
+
+interface Ethernet1/64
+
+interface mgmt0
+vrf member management
+
+interface loopback0
+ip address 10.0.0.5/32
+ip router ospf UNDERLAY area 0.0.0.0
+ip pim sparse-mode
+icam monitor scale
+
+line console
+exec-timeout 0
+line vty
+exec-timeout 0
+boot nxos bootflash:/nxos.9.3.8.bin sup-1
+router ospf UNDERLAY
+log-adjacency-changes
+router bgp 64500
+log-neighbor-changes
+address-family ipv4 unicast
+address-family l2vpn evpn
+template peer SPINE
+    remote-as 64500
+    update-source loopback0
+    address-family ipv4 unicast
+    send-community extended
+    soft-reconfiguration inbound
+    address-family l2vpn evpn
+    send-community
+    send-community extended
+neighbor 10.0.0.1
+    inherit peer SPINE
+neighbor 10.0.0.2
+    inherit peer SPINE
+vrf OVERLAY-TENANT1
+    log-neighbor-changes
+    address-family ipv4 unicast
+    network 0.0.0.0/0
+    network 10.10.1.0/24
+vrf OVERLAY-TENANT2
+    log-neighbor-changes
+    address-family ipv4 unicast
+    network 0.0.0.0/0
+    network 10.20.1.0/24
+vrf external
+    address-family ipv4 unicast
+    aggregate-address 10.10.1.0/24 summary-only
+    aggregate-address 10.20.1.0/24 summary-only
+    neighbor 10.1.50.2
+    remote-as 64520
+    address-family ipv4 unicast
+        route-map deny-default out
+evpn
+vni 100010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+vni 100020 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+
+no logging console
