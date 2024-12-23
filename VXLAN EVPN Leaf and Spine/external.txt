@@ -1,0 +1,157 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname external
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition OVERLAY-TENANT1
+rd 64520:1
+!
+address-family ipv4
+exit-address-family
+!
+vrf definition OVERLAY-TENANT2
+rd 64520:2
+!
+address-family ipv4
+exit-address-family
+!
+no logging console
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ip address 10.100.100.1 255.255.255.255
+!
+interface GigabitEthernet0/0
+ip address 10.1.50.2 255.255.255.252
+duplex auto
+speed auto
+!
+interface GigabitEthernet0/1
+ip address 10.99.99.254 255.255.255.0
+duplex auto
+speed auto
+media-type rj45
+!
+interface GigabitEthernet0/2
+no ip address
+shutdown
+duplex auto
+speed auto
+media-type rj45
+!
+interface GigabitEthernet0/3
+no ip address
+shutdown
+duplex auto
+speed auto
+media-type rj45
+!
+router bgp 64520
+bgp log-neighbor-changes
+no bgp default ipv4-unicast
+neighbor 10.1.50.1 remote-as 64500
+!
+address-family ipv4
+redistribute connected
+neighbor 10.1.50.1 activate
+exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+banner exec ^CC
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^CC
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^CC
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+exec-timeout 0 0
+line aux 0
+line vty 0 4
+exec-timeout 0 0
+login
+transport input none
+!
+no scheduler allocate
+!
+end
