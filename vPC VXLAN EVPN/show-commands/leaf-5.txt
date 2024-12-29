@@ -26,7 +26,7 @@ Hardware
   Device name: leaf-5
   bootflash:    4495360 kB
 
-Kernel uptime is 0 day(s), 1 hour(s), 24 minute(s), 50 second(s)
+Kernel uptime is 0 day(s), 2 hour(s), 23 minute(s), 5 second(s)
 
 Last reset 
   Reason: Unknown
@@ -39,6 +39,144 @@ plugin
 Active Package(s):
         
 
+leaf-5# show vpc
+
+Legend:
+                (*) - local vPC is down, forwarding via vPC peer-link
+
+vPC domain id                     : 300 
+Peer status                       : peer adjacency formed ok      
+vPC keep-alive status             : peer is alive                 
+Configuration consistency status  : success 
+Per-vlan consistency status       : success                       
+Type-2 consistency status         : success 
+vPC role                          : primary                       
+Number of vPCs configured         : 2   
+Peer Gateway                      : Enabled
+Dual-active excluded VLANs        : -
+Graceful Consistency Check        : Enabled
+Auto-recovery status              : Disabled
+Delay-restore status              : Timer is off.(timeout = 30s)
+Delay-restore SVI status          : Timer is off.(timeout = 10s)
+Delay-restore Orphan-port status  : Timer is off.(timeout = 0s)
+Operational Layer3 Peer-router    : Disabled
+Virtual-peerlink mode             : Disabled
+
+vPC Peer-link status
+---------------------------------------------------------------------
+id    Port   Status Active vlans    
+--    ----   ------ -------------------------------------------------
+1     Po1    up     1,10,20,900,998-999                                                  
+
+vPC status
+----------------------------------------------------------------------------
+Id    Port          Status Consistency Reason                Active vlans
+--    ------------  ------ ----------- ------                ---------------
+2     Po2           up     success     success               10                          
+                                                                                         
+3     Po3           up     success     success               20                          
+                                                                                         
+
+Please check "show vpc consistency-parameters vpc <vpc-num>" for the 
+consistency reason of down vpc and for type-2 consistency reasons for 
+any vpc.
+
+
+leaf-5# show vpc consistency-parameters global
+
+
+    Legend:
+        Type 1 : vPC will be suspended in case of mismatch
+
+Name                        Type  Local Value            Peer Value             
+-------------               ----  ---------------------- -----------------------
+STP MST Simulate PVST       1     Enabled                Enabled               
+STP Port Type, Edge         1     Normal, Disabled,      Normal, Disabled,     
+BPDUFilter, Edge BPDUGuard        Disabled               Disabled              
+STP MST Region Name         1     ""                     ""                    
+STP Disabled                1     None                   None                  
+STP Mode                    1     Rapid-PVST             Rapid-PVST            
+STP Bridge Assurance        1     Enabled                Enabled               
+STP Loopguard               1     Disabled               Disabled              
+STP MST Region Instance to  1                                                  
+ VLAN Mapping                                                                  
+STP MST Region Revision     1     0                      0                     
+Interface-vlan admin up     2     10,20,900,998-999      10,20,900,998-999     
+Interface-vlan routing      2     1,10,20,900,998-999    1,10,20,900,998-999   
+capability                                                                     
+Nve1 Adm St,Src Adm St,     1     Up, Up, 10.0.1.103,    Up, Up, 10.0.1.103,   
+Sec IP, Host Reach,VMAC           CP, TRUE, Disabled,    CP, TRUE, Disabled,   
+Adv,SA,S-ND,mcast l2,             Disabled, 0.0.0.0,     Disabled, 0.0.0.0,    
+mcast l3,IR BGP,MS Adm            0.0.0.0, Disabled,     0.0.0.0, Disabled,    
+St,Reori                          Down, 0.0.0.0          Down, 0.0.0.0         
+Xconnect Vlans              1                                                  
+QoS (Cos)                   2     ([0-7], [], [], [],    ([0-7], [], [], [],   
+                                  [], [], [], [])        [], [], [], [])       
+Network QoS (MTU)           2     (1500, 1500, 1500,     (1500, 1500, 1500,    
+                                  1500, 0, 0, 0, 0)      1500, 0, 0, 0, 0)     
+Network Qos (Pause:         2     (F, F, F, F, F, F, F,  (F, F, F, F, F, F, F, 
+T->Enabled, F->Disabled)          F)                     F)                    
+Input Queuing (Bandwidth)   2     (0, 0, 0, 0, 0, 0, 0,  (0, 0, 0, 0, 0, 0, 0, 
+                                  0)                     0)                    
+Input Queuing (Absolute     2     (F, F, F, F, F, F, F,  (F, F, F, F, F, F, F, 
+Priority: T->Enabled,             F)                     F)                    
+F->Disabled)                                                                   
+Output Queuing (Bandwidth   2     (100, 0, 0, 0, 0, 0,   (100, 0, 0, 0, 0, 0,  
+Remaining)                        0, 0)                  0, 0)                 
+Output Queuing (Absolute    2     (F, F, F, T, F, F, F,  (F, F, F, T, F, F, F, 
+Priority: T->Enabled,             F)                     F)                    
+F->Disabled)                                                                   
+Allowed VLANs               -     1,10,20,900,998-999    1,10,20,900,998-999   
+Local suspended VLANs       -     -                      -                     
+
+leaf-5# show vpc consistency-parameters vlans
+
+
+Name                        Type  Reason Code             Pass Vlans             
+-------------               ----  ---------------------- -----------------------
+STP MST Simulate PVST       1     SUCCESS                0-4095                
+STP Port Type, Edge         1     SUCCESS                0-4095                
+BPDUFilter, Edge BPDUGuard                                                     
+STP MST Region Name         1     SUCCESS                0-4095                
+STP Disabled                1     SUCCESS                0-4095                
+STP Mode                    1     SUCCESS                0-4095                
+STP Bridge Assurance        1     SUCCESS                0-4095                
+STP Loopguard               1     SUCCESS                0-4095                
+Xconnect Vlans              1     SUCCESS                0-4095                
+STP MST Region Instance to  1     SUCCESS                0-4095                
+ VLAN Mapping                                                                  
+STP MST Region Revision     1     SUCCESS                0-4095                
+Nve1 Adm St,Src Adm St,     1     SUCCESS                0-4095                
+Sec IP, Host Reach,VMAC                                                        
+Adv,SA,S-ND,mcast l2,                                                          
+mcast l3,IR BGP,MS Adm                                                         
+St,Reori                                                                       
+Pass Vlans                  -                            0-4095                
+
+leaf-5# show vpc consistency-parameters vni
+
+
+    Legend:
+        Type 1 : vPC will be suspended in case of mismatch
+
+Name                        Type  Local Value            Peer Value             
+-------------               ----  ---------------------- -----------------------
+Nve1 Adm St,Src Adm St,     1     Up, Up, 10.0.1.103,    Up, Up, 10.0.1.103,   
+Sec IP, Host Reach,VMAC           CP, TRUE, Disabled,    CP, TRUE, Disabled,   
+Adv,SA,S-ND,mcast l2,             Disabled, 0.0.0.0,     Disabled, 0.0.0.0,    
+mcast l3,IR BGP,MS Adm            0.0.0.0, Disabled,     0.0.0.0, Disabled,    
+St,Reori                          Down, 0.0.0.0          Down, 0.0.0.0         
+Nve1 Vni, Mcast, Mode,      1     100999, 0.0.0.0, n/a,  100999, 0.0.0.0, n/a, 
+Type, Flags, DCI Mcast            L3, L3VNI, 0.0.0.0     L3, L3VNI, 0.0.0.0    
+Nve1 Vni, Mcast, Mode,      1     100998, 0.0.0.0, n/a,  100998, 0.0.0.0, n/a, 
+Type, Flags, DCI Mcast            L3, L3VNI, 0.0.0.0     L3, L3VNI, 0.0.0.0    
+Nve1 Vni, Mcast, Mode,      1     100020, 224.1.1.192,   100020, 224.1.1.192,  
+Type, Flags, DCI Mcast            Mcast, L2, SA, 0.0.0.0 Mcast, L2, SA, 0.0.0.0
+Nve1 Vni, Mcast, Mode,      1     100010, 224.1.1.192,   100010, 224.1.1.192,  
+Type, Flags, DCI Mcast            Mcast, L2, SA, 0.0.0.0 Mcast, L2, SA, 0.0.0.0
+Allowed VLANs               -     1,10,20,900,998-999    1,10,20,900,998-999   
+Local suspended VLANs       -     -                      -                     
+
 leaf-5# show cdp neighbors
 
 Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge
@@ -48,15 +186,15 @@ Capability Codes: R - Router, T - Trans-Bridge, B - Source-Route-Bridge
 
 Device-ID          Local Intrfce  Hldtme Capability  Platform      Port ID
 spine-1(969RBFXC5YY)
-                    Eth1/1         144    R S s     N9K-C9300v       Eth1/5        
+                    Eth1/1         121    R S s     N9K-C9300v       Eth1/5        
 spine-2(93JMW1KEILA)
-                    Eth1/2         129    R S s     N9K-C9300v       Eth1/5        
+                    Eth1/2         165    R S s     N9K-C9300v       Eth1/5        
 leaf-6(9CZH6ZL0HBM)
-                    Eth1/3         139    R S I s   N9K-C9300v       Eth1/3        
+                    Eth1/3         176    R S I s   N9K-C9300v       Eth1/3        
 leaf-6(9CZH6ZL0HBM)
-                    Eth1/4         144    R S I s   N9K-C9300v       Eth1/4        
+                    Eth1/4         120    R S I s   N9K-C9300v       Eth1/4        
 leaf-6(9CZH6ZL0HBM)
-                    Eth1/5         139    R S s     N9K-C9300v       Eth1/5        
+                    Eth1/5         176    R S s     N9K-C9300v       Eth1/5        
 
 Total entries displayed: 5
 
@@ -208,6 +346,7 @@ Port          Name               Status    Vlan      Duplex  Speed   Type
 Vlan1         --                 down      routed    auto    auto    --
 Vlan10        --                 connected routed    auto    auto    --
 Vlan20        --                 connected routed    auto    auto    --
+Vlan900       --                 connected routed    auto    auto    --
 Vlan998       --                 connected routed    auto    auto    --
 Vlan999       --                 connected routed    auto    auto    --
 
@@ -221,6 +360,7 @@ leaf-5# show ip interface brief vrf all
 
 IP Interface Status for VRF "default"(1)
 Interface            IP Address      Interface Status
+Vlan900              10.0.3.9        protocol-up/link-up/admin-up       
 Lo0                  10.0.0.7        protocol-up/link-up/admin-up       
 Lo1                  10.0.1.5        protocol-up/link-up/admin-up       
 Eth1/1               unnumbered      protocol-up/link-up/admin-up       
@@ -251,10 +391,23 @@ Eth1/5               172.16.0.4      protocol-up/link-up/admin-up
 leaf-5# show ip ospf neighbors
 
  OSPF Process ID UNDERLAY VRF default
- Total number of neighbors: 2
+ Total number of neighbors: 3
  Neighbor ID     Pri State            Up Time  Address         Interface
- 10.0.0.1          1 FULL/ -          01:17:37 10.0.0.1        Eth1/1 
- 10.0.0.2          1 FULL/ -          01:17:37 10.0.0.2        Eth1/2 
+ 10.0.0.1          1 FULL/ -          02:16:05 10.0.0.1        Eth1/1 
+ 10.0.0.2          1 FULL/ -          02:16:05 10.0.0.2        Eth1/2 
+ 10.0.0.8          1 FULL/ -          00:05:42 10.0.3.10       Vlan900 
+
+leaf-5# show ip ospf interface brief
+
+ OSPF Process ID UNDERLAY VRF default
+ Total number of interface: 5
+ Interface               ID     Area            Cost   State    Neighbors Status
+ Lo0                     1      0.0.0.0         1      LOOPBACK 0         up  
+ Lo1                     2      0.0.0.0         1      LOOPBACK 0         up  
+ Eth1/1                  4      0.0.0.0         40     P2P      1         up  
+ Eth1/2                  3      0.0.0.0         40     P2P      1         up  
+ Vlan900                 5      0.0.0.0         40     P2P      1         up  
+
 
 leaf-5# show ip pim rp
 
@@ -267,7 +420,7 @@ Auto-RP Announce policy: None
 Auto-RP Discovery policy: None
 
 RP: 10.0.0.99, (0), 
- uptime: 01:20:13   priority: 255, 
+ uptime: 02:18:42   priority: 255, 
  RP-source: (local),  
  group ranges:
  224.0.0.0/4   
@@ -277,25 +430,25 @@ leaf-5# show ip pim neighbor
 PIM Neighbor Status for VRF "default"
 Neighbor        Interface            Uptime    Expires   DR       Bidir-  BFD    ECMP Redirect
                                                          Priority Capable State     Capable
-10.0.0.1        Ethernet1/1          01:17:41  00:01:33  1        yes     n/a     no
-10.0.0.2        Ethernet1/2          01:17:41  00:01:17  1        yes     n/a     no
+10.0.0.1        Ethernet1/1          02:16:11  00:01:31  1        yes     n/a     no
+10.0.0.2        Ethernet1/2          02:16:11  00:01:25  1        yes     n/a     no
 
 leaf-5# show ip mroute
 
 IP Multicast Routing Table for VRF "default"
 
-(*, 224.1.1.192/32), uptime: 01:20:12, nve ip pim 
+(*, 224.1.1.192/32), uptime: 02:18:41, nve ip pim 
   Incoming interface: Ethernet1/2, RPF nbr: 10.0.0.2
   Outgoing interface list: (count: 1)
-    nve1, uptime: 01:20:12, nve
+    nve1, uptime: 02:18:41, nve
 
 
-(10.0.1.103/32, 224.1.1.192/32), uptime: 01:20:12, nve mrib ip pim 
+(10.0.1.103/32, 224.1.1.192/32), uptime: 02:18:41, nve mrib ip pim 
   Incoming interface: loopback1, RPF nbr: 10.0.1.103
   Outgoing interface list: (count: 0)
 
 
-(*, 232.0.0.0/8), uptime: 01:20:14, pim ip 
+(*, 232.0.0.0/8), uptime: 02:18:44, pim ip 
   Incoming interface: Null, RPF nbr: 0.0.0.0
   Outgoing interface list: (count: 0)
 
@@ -309,9 +462,9 @@ admin state is up,  Hardware: NVE
   Encapsulation VXLAN
   Auto-mdix is turned off
   RX
-    ucast: 1 pkts, 60 bytes - mcast: 1 pkts, 60 bytes
+    ucast: 8 pkts, 746 bytes - mcast: 6 pkts, 342 bytes
   TX
-    ucast: 2 pkts, 220 bytes - mcast: 0 pkts, 0 bytes
+    ucast: 18 pkts, 2304 bytes - mcast: 0 pkts, 0 bytes
 
 
 leaf-5# show bgp vrf all ipv4 unicast summary
@@ -322,19 +475,19 @@ BGP summary information for VRF OVERLAY-TENANT2, address family IPv4 Unicast
 
 BGP summary information for VRF default, address family IPv4 Unicast
 BGP router identifier 10.0.0.7, local AS number 64500
-BGP table version is 1, IPv4 Unicast config peers 2, capable peers 2
+BGP table version is 4, IPv4 Unicast config peers 2, capable peers 2
 0 network entries and 0 paths using 0 bytes of memory
 BGP attribute entries [0/0], BGP AS path entries [0/0]
 BGP community entries [0/0], BGP clusterlist entries [10/40]
 
 Neighbor        V    AS    MsgRcvd    MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.0.0.1        4 64500        142         83        1    0    0 01:16:30 0         
-10.0.0.2        4 64500        143         83        1    0    0 01:17:21 0         
+10.0.0.1        4 64500        287        149        4    0    0 00:41:58 0         
+10.0.0.2        4 64500        286        150        4    0    0 00:41:58 0         
 
 leaf-5# show bgp vrf all ipv4 unicast
 
 BGP routing table information for VRF OVERLAY-TENANT1, address family IPv4 Unicast
-BGP table version is 25, Local Router ID is 10.1.1.254
+BGP table version is 69, Local Router ID is 10.1.1.254
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
@@ -355,13 +508,16 @@ Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - b
 * i                   10.0.1.101                        100          0 i
 *>i10.1.1.2/32        10.0.1.102                        100          0 i
 * i                   10.0.1.102                        100          0 i
+*>i10.1.1.3/32        10.0.1.3                          100          0 i
 *>i10.2.0.0/16        10.0.1.3                          100          0 i
 *|i                   10.0.1.4                          100          0 i
 *>i10.2.1.0/24        10.0.1.3                          100          0 i
 *|i                   10.0.1.4                          100          0 i
+*>i10.2.1.1/32        10.0.1.3                          100          0 i
+*>i10.2.1.3/32        10.0.1.3                          100          0 i
 
 BGP routing table information for VRF OVERLAY-TENANT2, address family IPv4 Unicast
-BGP table version is 12, Local Router ID is 10.2.1.254
+BGP table version is 29, Local Router ID is 10.2.1.254
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
@@ -375,15 +531,19 @@ Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - b
 * i                   10.0.1.1                          100          0 i
 * i                   10.0.1.2                          100          0 i
 *>l                   0.0.0.0                           100      32768 i
+* i10.2.1.1/32        10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
+* i10.2.1.2/32        10.0.1.102                        100          0 i
+*>i                   10.0.1.102                        100          0 i
 
 
 leaf-5# show bgp vrf all ipv4 unicast detail
 
 BGP routing table information for VRF OVERLAY-TENANT1, address family IPv4 Unicast
-BGP routing table entry for 0.0.0.0/0, version 19
+BGP routing table entry for 0.0.0.0/0, version 57
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 27, (0x00000000100002) on xmit-list
+  vpn: version 84, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Advertised path-id 1, VPN AF advertised path-id 1
@@ -410,10 +570,10 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.1.0.0/16, version 20
+BGP routing table entry for 10.1.0.0/16, version 58
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 28, (0x00000000100002) on xmit-list
+  vpn: version 85, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Advertised path-id 1, VPN AF advertised path-id 1
@@ -442,13 +602,13 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.1.1.0/24, version 21
+BGP routing table entry for 10.1.1.0/24, version 69
 Paths: (6 available, best #6)
 Flags: (0x80c0002) (high32 0x000020) on xmit-list, is not in urib, exported
-  vpn: version 29, (0x00000000100002) on xmit-list
+  vpn: version 103, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.5:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -466,16 +626,16 @@ Multipath: iBGP
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5006.0000.1b08
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
              Imported from 10.0.0.8:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100999
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5008.0000.1b08
       Originator: 10.0.0.8 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.3:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.1 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -484,7 +644,7 @@ Multipath: iBGP
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5003.0000.1b08
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.4:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.2 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -505,10 +665,10 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.1.1.1/32, version 22
+BGP routing table entry for 10.1.1.1/32, version 56
 Paths: (3 available, best #2)
 Flags: (0x8008021a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 30, (0x00000000100002) on xmit-list
+  vpn: version 83, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Path type: internal, path is valid, not best reason: MAC Mobility Sequence, no labeled nexthop
@@ -547,10 +707,10 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.1.1.2/32, version 23
+BGP routing table entry for 10.1.1.2/32, version 66
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 31, (0x00000000100002) on xmit-list
+  vpn: version 94, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Advertised path-id 1, VPN AF advertised path-id 1
@@ -579,10 +739,32 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.2.0.0/16, version 24
+BGP routing table entry for 10.1.1.3/32, version 61
+Paths: (1 available, best #1)
+Flags: (0x80080212) (high32 00000000) on xmit-list, is in urib, is backup urib route, is in HW
+  vpn: version 88, (0x00000000100002) on xmit-list
+Multipath: iBGP
+
+  Advertised path-id 1, VPN AF advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.1.1.3]/224 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
+BGP routing table entry for 10.2.0.0/16, version 59
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 32, (0x00000000100002) on xmit-list
+  vpn: version 86, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Advertised path-id 1, VPN AF advertised path-id 1
@@ -611,10 +793,10 @@ Multipath: iBGP
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.2.1.0/24, version 25
+BGP routing table entry for 10.2.1.0/24, version 60
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 33, (0x00000000100002) on xmit-list
+  vpn: version 87, (0x00000000100002) on xmit-list
 Multipath: iBGP
 
   Advertised path-id 1, VPN AF advertised path-id 1
@@ -636,10 +818,61 @@ Multipath: iBGP
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5006.0000.1b08
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
-  VRF advertise r 10.1.0.0/16, version 12
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
+BGP routing table entry for 10.2.1.1/32, version 67
+Paths: (1 available, best #1)
+Flags: (0x8008021a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
+  vpn: version 98, (0x00000000100002) on xmit-list
+Multipath: iBGP
+
+  Advertised path-id 1, VPN AF advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.2.1.1]/224 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
+BGP routing table entry for 10.2.1.3/32, version 68
+Paths: (1 available, best #1)
+Flags: (0x8008021a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
+  vpn: version 99, (0x00000000100002) on xmit-list
+Multipath: iBGP
+
+  Advertised path-id 1, VPN AF advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.2.1.3]/224 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
+
+BGP routing table information for VRF OVERLAY-TENANT2, address family IPv4 Unicast
+BGP routing table entry for 10.1.0.0/16, version 22
 Paths: (2 available, best #1)
 Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
-  vpn: version 23, (0x00000000100002) on xmit-list
+  vpn: version 90, (0x00000000100002) on xmit-list
 
   Advertised path-id 1, VPN AF advertised path-id 1
   Path type: internal, path is valid, is best path, no labeled nexthop, in rib
@@ -667,12 +900,12 @@ Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib rou
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
-BGP routing table entry for 10.2.1.0/24, version 11
+BGP routing table entry for 10.2.1.0/24, version 29
 Paths: (6 available, best #6)
 Flags: (0x80c0002) (high32 0x000020) on xmit-list, is not in urib, exported
-  vpn: version 18, (0x00000000100002) on xmit-list
+  vpn: version 104, (0x00000000100002) on xmit-list
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.5:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -690,16 +923,16 @@ Flags: (0x80c0002) (high32 0x000020) on xmit-list, is not in urib, exported
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5006.0000.1b08
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
              Imported from 10.0.0.8:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100998
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5008.0000.1b08
       Originator: 10.0.0.8 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.3:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.1 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -708,7 +941,7 @@ Flags: (0x80c0002) (high32 0x000020) on xmit-list, is not in urib, exported
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5003.0000.1b08
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.4:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   AS-Path: NONE, path sourced internal to AS
     10.0.1.2 (metric 81) from 10.0.0.1 (10.0.0.1)
@@ -729,29 +962,91 @@ Flags: (0x80c0002) (high32 0x000020) on xmit-list, is not in urib, exported
 
   VPN AF advertise information:
   Path-id 1 not advertised to any peer
+BGP routing table entry for 10.2.1.1/32, version 25
+Paths: (2 available, best #2)
+Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
+  vpn: version 97, (0x00000000100002) on xmit-list
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.4:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1, VPN AF advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.3:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
+BGP routing table entry for 10.2.1.2/32, version 28
+Paths: (2 available, best #2)
+Flags: (0x8008001a) (high32 00000000) on xmit-list, is in urib, is best urib route, is in HW
+  vpn: version 102, (0x00000000100002) on xmit-list
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.6:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1, VPN AF advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  VRF advertise information:
+  Path-id 1 not advertised to any peer
+
+  VPN AF advertise information:
+  Path-id 1 not advertised to any peer
 
 
 leaf-5# show bgp l2vpn evpn summary
 
 BGP summary information for VRF default, address family L2VPN EVPN
 BGP router identifier 10.0.0.7, local AS number 64500
-BGP table version is 143, L2VPN EVPN config peers 2, capable peers 2
-61 network entries and 119 paths using 19444 bytes of memory
-BGP attribute entries [113/40680], BGP AS path entries [1/6]
+BGP table version is 461, L2VPN EVPN config peers 2, capable peers 2
+85 network entries and 160 paths using 26644 bytes of memory
+BGP attribute entries [148/53280], BGP AS path entries [1/6]
 BGP community entries [0/0], BGP clusterlist entries [10/40]
 
 Neighbor        V    AS    MsgRcvd    MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
-10.0.0.1        4 64500        142         83      143    0    0 01:16:37 37        
-10.0.0.2        4 64500        143         83      143    0    0 01:17:28 37        
+10.0.0.1        4 64500        287        150      461    0    0 00:42:05 48        
+10.0.0.2        4 64500        286        151      461    0    0 00:42:05 48        
 
 Neighbor        T    AS PfxRcd     Type-2     Type-3     Type-4     Type-5    
-10.0.0.1        I 64500 37         16         0          0          21        
-10.0.0.2        I 64500 37         16         0          0          21        
+10.0.0.1        I 64500 48         24         0          0          24        
+10.0.0.2        I 64500 48         24         0          0          24        
 
 leaf-5# show bgp vrf all l2vpn evpn
 
 BGP routing table information for VRF default, address family L2VPN EVPN
-BGP table version is 143, Local Router ID is 10.0.0.7
+BGP table version is 461, Local Router ID is 10.0.0.7
 Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
 Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-injected
 Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - best2
@@ -781,6 +1076,14 @@ Route Distinguisher: 10.0.0.3:32777
                       10.0.1.101                        100          0 i
 * i                   10.0.1.101                        100          0 i
 
+Route Distinguisher: 10.0.0.3:32787
+* i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216
+                      10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
+* i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272
+                      10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
+
 Route Distinguisher: 10.0.0.4:4
 *>i[2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216
                       10.0.1.101                        100          0 i
@@ -802,6 +1105,14 @@ Route Distinguisher: 10.0.0.4:32777
                       10.0.1.101                        100          0 i
 *>i                   10.0.1.101                        100          0 i
 *>i[2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272
+                      10.0.1.101                        100          0 i
+* i                   10.0.1.101                        100          0 i
+
+Route Distinguisher: 10.0.0.4:32787
+*>i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216
+                      10.0.1.101                        100          0 i
+* i                   10.0.1.101                        100          0 i
+*>i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272
                       10.0.1.101                        100          0 i
 * i                   10.0.1.101                        100          0 i
 
@@ -827,6 +1138,15 @@ Route Distinguisher: 10.0.0.5:4
 *>i[5]:[0]:[0]:[32]:[10.1.1.1]/224
                       10.0.1.3                          100          0 i
 * i                   10.0.1.3                          100          0 i
+* i[5]:[0]:[0]:[32]:[10.1.1.3]/224
+                      10.0.1.3                          100          0 i
+*>i                   10.0.1.3                          100          0 i
+*>i[5]:[0]:[0]:[32]:[10.2.1.1]/224
+                      10.0.1.3                          100          0 i
+* i                   10.0.1.3                          100          0 i
+* i[5]:[0]:[0]:[32]:[10.2.1.3]/224
+                      10.0.1.3                          100          0 i
+*>i                   10.0.1.3                          100          0 i
 
 Route Distinguisher: 10.0.0.5:5
 * i[2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216
@@ -846,6 +1166,14 @@ Route Distinguisher: 10.0.0.5:32777
 * i[2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272
                       10.0.1.102                        100          0 i
 *>i                   10.0.1.102                        100          0 i
+
+Route Distinguisher: 10.0.0.5:32787
+*>i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216
+                      10.0.1.102                        100          0 i
+* i                   10.0.1.102                        100          0 i
+*>i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272
+                      10.0.1.102                        100          0 i
+* i                   10.0.1.102                        100          0 i
 
 Route Distinguisher: 10.0.0.6:4
 *>i[2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216
@@ -886,6 +1214,14 @@ Route Distinguisher: 10.0.0.6:32777
                       10.0.1.102                        100          0 i
 * i                   10.0.1.102                        100          0 i
 
+Route Distinguisher: 10.0.0.6:32787
+*>i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216
+                      10.0.1.102                        100          0 i
+* i                   10.0.1.102                        100          0 i
+*>i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272
+                      10.0.1.102                        100          0 i
+* i                   10.0.1.102                        100          0 i
+
 Route Distinguisher: 10.0.0.7:32777    (L2VNI 100010)
 * i[2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216
                       10.0.1.102                        100          0 i
@@ -893,12 +1229,34 @@ Route Distinguisher: 10.0.0.7:32777    (L2VNI 100010)
 *>i[2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216
                       10.0.1.101                        100          0 i
 * i                   10.0.1.101                        100          0 i
+*>l[2]:[0]:[0]:[48]:[ba95.b91a.fcf9]:[0]:[0.0.0.0]/216
+                      10.0.1.103                        100      32768 i
 *>i[2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272
                       10.0.1.102                        100          0 i
 * i                   10.0.1.102                        100          0 i
 *>i[2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272
                       10.0.1.101                        100          0 i
 * i                   10.0.1.101                        100          0 i
+*>l[2]:[0]:[0]:[48]:[ba95.b91a.fcf9]:[32]:[10.1.1.3]/272
+                      10.0.1.103                        100      32768 i
+
+Route Distinguisher: 10.0.0.7:32787    (L2VNI 100020)
+*>i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216
+                      10.0.1.102                        100          0 i
+* i                   10.0.1.102                        100          0 i
+*>l[2]:[0]:[0]:[48]:[96f2.42d3.1a3c]:[0]:[0.0.0.0]/216
+                      10.0.1.103                        100      32768 i
+* i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216
+                      10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
+* i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272
+                      10.0.1.102                        100          0 i
+*>i                   10.0.1.102                        100          0 i
+*>l[2]:[0]:[0]:[48]:[96f2.42d3.1a3c]:[32]:[10.2.1.3]/272
+                      10.0.1.103                        100      32768 i
+* i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272
+                      10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
 
 Route Distinguisher: 10.0.0.8:4
 * i[5]:[0]:[0]:[24]:[10.1.1.0]/224
@@ -948,6 +1306,12 @@ Route Distinguisher: 10.0.0.7:4    (L3VNI 100999)
 * i                   10.0.1.4                          100          0 i
 *>i[5]:[0]:[0]:[32]:[10.1.1.1]/224
                       10.0.1.3                          100          0 i
+*>i[5]:[0]:[0]:[32]:[10.1.1.3]/224
+                      10.0.1.3                          100          0 i
+*>i[5]:[0]:[0]:[32]:[10.2.1.1]/224
+                      10.0.1.3                          100          0 i
+*>i[5]:[0]:[0]:[32]:[10.2.1.3]/224
+                      10.0.1.3                          100          0 i
 
 Route Distinguisher: 10.0.0.7:5    (L3VNI 100998)
 *>i[2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216
@@ -960,6 +1324,12 @@ Route Distinguisher: 10.0.0.7:5    (L3VNI 100998)
                       10.0.1.102                        100          0 i
 *>l[2]:[0]:[0]:[48]:[5007.0000.1b08]:[0]:[0.0.0.0]/216
                       10.0.1.103                        100      32768 i
+* i[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272
+                      10.0.1.102                        100          0 i
+*>i                   10.0.1.102                        100          0 i
+* i[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272
+                      10.0.1.101                        100          0 i
+*>i                   10.0.1.101                        100          0 i
 *>i[5]:[0]:[0]:[16]:[10.1.0.0]/224
                       10.0.1.3                          100          0 i
 * i                   10.0.1.4                          100          0 i
@@ -976,7 +1346,7 @@ leaf-5# show bgp vrf all l2vpn evpn detail
 
 BGP routing table information for VRF default, address family L2VPN EVPN
 Route Distinguisher: 10.0.0.3:4
-BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 12
+BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 338
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1000,7 +1370,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.3 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 10
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 339
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1028,7 +1398,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.3:5
-BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 13
+BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 340
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1052,7 +1422,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.3 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 11
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 341
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1080,7 +1450,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.3:32777
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 133
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 342
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1106,7 +1476,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 88
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 343
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1133,8 +1503,60 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
 
   Path-id 1 not advertised to any peer
 
+Route Distinguisher: 10.0.0.3:32787
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216, version 431
+Paths: (2 available, best #2)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.3 Cluster list: 10.0.0.2 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 1 destination(s)
+             Imported paths list: L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272, version 415
+Paths: (2 available, best #2)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.3 Cluster list: 10.0.0.2 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 3 destination(s)
+             Imported paths list: OVERLAY-TENANT2 L3-100998 L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+
 Route Distinguisher: 10.0.0.4:4
-BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 8
+BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 344
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1158,7 +1580,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 6
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 345
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1186,7 +1608,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.4:5
-BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 9
+BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 346
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1210,7 +1632,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 7
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 347
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1238,7 +1660,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.4:32777
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 129
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 348
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1264,7 +1686,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 89
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 349
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1291,8 +1713,60 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
 
   Path-id 1 not advertised to any peer
 
+Route Distinguisher: 10.0.0.4:32787
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216, version 432
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 1 destination(s)
+             Imported paths list: L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.4 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272, version 427
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 3 destination(s)
+             Imported paths list: OVERLAY-TENANT2 L3-100998 L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.4 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+
 Route Distinguisher: 10.0.0.5:4
-BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 67
+BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 350
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1316,7 +1790,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 75
+BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 351
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1342,7 +1816,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 70
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 352
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1370,7 +1844,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 69
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 353
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1398,7 +1872,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 73
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 405
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1424,7 +1898,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 72
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 355
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1450,7 +1924,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.1]/224, version 83
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.1]/224, version 356
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1478,9 +1952,93 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.3]/224, version 357
+Paths: (2 available, best #2)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.2 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 2 destination(s)
+             Imported paths list: OVERLAY-TENANT1 L3-100999
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.2.1.1]/224, version 424
+Paths: (2 available, best #1)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 2 destination(s)
+             Imported paths list: OVERLAY-TENANT1 L3-100999
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.2.1.3]/224, version 437
+Paths: (2 available, best #2)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.2 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 2 destination(s)
+             Imported paths list: OVERLAY-TENANT1 L3-100999
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.5:5
-BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 68
+BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 358
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1504,7 +2062,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 71
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 359
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1532,7 +2090,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 74
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 360
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1560,7 +2118,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.5:32777
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 143
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 361
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1584,7 +2142,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 109
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 414
 Paths: (2 available, best #2)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1611,8 +2169,60 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
 
   Path-id 1 not advertised to any peer
 
+Route Distinguisher: 10.0.0.5:32787
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216, version 456
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 1 destination(s)
+             Imported paths list: L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.5 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272, version 441
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 3 destination(s)
+             Imported paths list: OVERLAY-TENANT2 L3-100998 L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.5 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+
 Route Distinguisher: 10.0.0.6:4
-BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 38
+BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 363
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1636,7 +2246,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 37
+BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 364
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1662,7 +2272,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 33
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 365
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1690,7 +2300,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 31
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 366
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1718,7 +2328,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 35
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 367
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1744,7 +2354,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 36
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 368
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1772,7 +2382,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.6:5
-BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 39
+BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 369
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1796,7 +2406,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 32
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 370
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1824,7 +2434,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 34
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 371
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1852,7 +2462,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.6:32777
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 140
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 372
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1876,7 +2486,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.2 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 103
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 373
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -1903,8 +2513,60 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
 
   Path-id 1 not advertised to any peer
 
+Route Distinguisher: 10.0.0.6:32787
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216, version 450
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 1 destination(s)
+             Imported paths list: L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.6 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272, version 449
+Paths: (2 available, best #1)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported to 3 destination(s)
+             Imported paths list: OVERLAY-TENANT2 L3-100998 L2-100020
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.2 (10.0.0.2)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.6 Cluster list: 10.0.0.2 
+
+  Path-id 1 not advertised to any peer
+
 Route Distinguisher: 10.0.0.7:32777    (L2VNI 100010)
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 142
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[0]:[0.0.0.0]/216, version 394
 Paths: (2 available, best #2)
 Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
 
@@ -1928,7 +2590,7 @@ Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 134
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[0]:[0.0.0.0]/216, version 380
 Paths: (2 available, best #1)
 Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
 
@@ -1954,7 +2616,22 @@ Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 107
+BGP routing table entry for [2]:[0]:[0]:[48]:[ba95.b91a.fcf9]:[0]:[0.0.0.0]/216, version 195
+Paths: (1 available, best #1)
+Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
+
+  Advertised path-id 1
+  Path type: local, path is valid, is best path, no labeled nexthop
+  AS-Path: NONE, path locally originated
+    10.0.1.103 (metric 0) from 0.0.0.0 (10.0.0.7)
+      Origin IGP, MED not set, localpref 100, weight 32768
+      Received label 100010
+      Extcommunity: RT:64500:100010 SOO:10.0.1.103:0 ENCAP:8
+          MAC Mobility Sequence:00:1
+
+  Path-id 1 advertised to peers:
+    10.0.0.1           10.0.0.2       
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 412
 Paths: (2 available, best #1)
 Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
 
@@ -1980,7 +2657,7 @@ Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 90
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 381
 Paths: (2 available, best #1)
 Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
 
@@ -2006,16 +2683,162 @@ Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[ba95.b91a.fcf9]:[32]:[10.1.1.3]/272, version 147
+Paths: (1 available, best #1)
+Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
+
+  Advertised path-id 1
+  Path type: local, path is valid, is best path, no labeled nexthop
+  AS-Path: NONE, path locally originated
+    10.0.1.103 (metric 0) from 0.0.0.0 (10.0.0.7)
+      Origin IGP, MED not set, localpref 100, weight 32768
+      Received label 100010 100999
+      Extcommunity: RT:64500:100010 RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          MAC Mobility Sequence:00:1 Router MAC:0200.0a00.0167
+
+  Path-id 1 advertised to peers:
+    10.0.0.1           10.0.0.2       
+
+Route Distinguisher: 10.0.0.7:32787    (L2VNI 100020)
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216, version 457
+Paths: (2 available, best #1)
+Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.6:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[0]:[0.0.0.0]/216 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.102:0 ENCAP:8
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[96f2.42d3.1a3c]:[0]:[0.0.0.0]/216, version 418
+Paths: (1 available, best #1)
+Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
+
+  Advertised path-id 1
+  Path type: local, path is valid, is best path, no labeled nexthop
+  AS-Path: NONE, path locally originated
+    10.0.1.103 (metric 0) from 0.0.0.0 (10.0.0.7)
+      Origin IGP, MED not set, localpref 100, weight 32768
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.103:0 ENCAP:8
+
+  Path-id 1 advertised to peers:
+    10.0.0.1           10.0.0.2       
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216, version 433
+Paths: (2 available, best #2)
+Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.4:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.3:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[0]:[0.0.0.0]/216 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020
+      Extcommunity: RT:64500:100020 SOO:10.0.1.101:0 ENCAP:8
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272, version 451
+Paths: (2 available, best #2)
+Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.6:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.5:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[96f2.42d3.1a3c]:[32]:[10.2.1.3]/272, version 434
+Paths: (1 available, best #1)
+Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
+
+  Advertised path-id 1
+  Path type: local, path is valid, is best path, no labeled nexthop
+  AS-Path: NONE, path locally originated
+    10.0.1.103 (metric 0) from 0.0.0.0 (10.0.0.7)
+      Origin IGP, MED not set, localpref 100, weight 32768
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:0200.0a00.0167
+
+  Path-id 1 advertised to peers:
+    10.0.0.1           10.0.0.2       
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272, version 429
+Paths: (2 available, best #2)
+Flags: (0x000212) (high32 00000000) on xmit-list, is in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.4:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop, in rib
+             Imported from 10.0.0.3:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.8:4
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 29
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 458
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
   Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.2 (10.0.0.2)
+    10.0.1.6 (metric 41) from 10.0.0.2 (10.0.0.2)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100999
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5008.0000.1b08
@@ -2027,7 +2850,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
              Imported paths list: OVERLAY-TENANT1 L3-100999
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100999
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5008.0000.1b08
@@ -2036,14 +2859,14 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.8:5
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 30
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 459
 Paths: (2 available, best #2)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
   Path type: internal, path is valid, not best reason: Neighbor Address, no labeled nexthop
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.2 (10.0.0.2)
+    10.0.1.6 (metric 41) from 10.0.0.2 (10.0.0.2)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100998
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5008.0000.1b08
@@ -2055,7 +2878,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
              Imported paths list: OVERLAY-TENANT2 L3-100998
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100998
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5008.0000.1b08
@@ -2064,7 +2887,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
   Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.7:4    (L3VNI 100999)
-BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 18
+BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 376
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2079,7 +2902,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 16
+BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 383
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2094,7 +2917,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 58
+BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 385
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2109,7 +2932,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 47
+BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 397
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2138,7 +2961,7 @@ Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
 
   Path-id 1 advertised to peers:
     10.0.0.1           10.0.0.2       
-BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 108
+BGP routing table entry for [2]:[0]:[0]:[48]:[1e74.b5ab.a866]:[32]:[10.1.1.2]/272, version 413
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2164,7 +2987,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 91
+BGP routing table entry for [2]:[0]:[0]:[48]:[ae55.e8c9.b384]:[32]:[10.1.1.1]/272, version 382
 Paths: (2 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2190,7 +3013,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 66
+BGP routing table entry for [5]:[0]:[0]:[0]:[0.0.0.0]/224, version 386
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2216,7 +3039,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 61
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 387
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2244,7 +3067,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 60
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.2.0.0]/224, version 388
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2272,11 +3095,11 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 64
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.1.1.0]/224, version 460
 Paths: (6 available, best #6)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.5:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2296,17 +3119,17 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5006.0000.1b08
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
              Imported from 10.0.0.8:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100999
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5008.0000.1b08
       Originator: 10.0.0.8 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.3:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2316,7 +3139,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
       Extcommunity: RT:64500:100999 ENCAP:8 Router MAC:5003.0000.1b08
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.4:4:[5]:[0]:[0]:[24]:[10.1.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2337,7 +3160,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
 
   Path-id 1 advertised to peers:
     10.0.0.1           10.0.0.2       
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 63
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 389
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2363,7 +3186,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.1]/224, version 84
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.1]/224, version 390
 Paths: (1 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2380,9 +3203,60 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.1.1.3]/224, version 391
+Paths: (1 available, best #1)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.1.1.3]/224 
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.2.1.1]/224, version 425
+Paths: (1 available, best #1)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.2.1.1]/224 
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[32]:[10.2.1.3]/224, version 436
+Paths: (1 available, best #1)
+Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported from 10.0.0.5:4:[5]:[0]:[0]:[32]:[10.2.1.3]/224 
+  Gateway IP: 0.0.0.0
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.3 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100999
+      Extcommunity: RT:64500:100999 SOO:10.0.1.103:0 ENCAP:8
+          Router MAC:5005.0000.1b08
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
 
 Route Distinguisher: 10.0.0.7:5    (L3VNI 100998)
-BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 19
+BGP routing table entry for [2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216, version 378
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2397,7 +3271,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 17
+BGP routing table entry for [2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216, version 384
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2412,7 +3286,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.4 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 59
+BGP routing table entry for [2]:[0]:[0]:[48]:[5005.0000.1b08]:[0]:[0.0.0.0]/216, version 392
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2427,7 +3301,7 @@ Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.5 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 48
+BGP routing table entry for [2]:[0]:[0]:[48]:[5006.0000.1b08]:[0]:[0.0.0.0]/216, version 398
 Paths: (1 available, best #1)
 Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2456,7 +3330,59 @@ Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
 
   Path-id 1 advertised to peers:
     10.0.0.1           10.0.0.2       
-BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 62
+BGP routing table entry for [2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272, version 452
+Paths: (2 available, best #2)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.6:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.6 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported from 10.0.0.5:32787:[2]:[0]:[0]:[48]:[5e2f.2af3.1602]:[32]:[10.2.1.2]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.102 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.102:0 ENCAP:8
+          Router MAC:0200.0a00.0166
+      Originator: 10.0.0.5 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272, version 430
+Paths: (2 available, best #2)
+Flags: (0x000202) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
+
+  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+             Imported from 10.0.0.4:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.4 Cluster list: 10.0.0.1 
+
+  Advertised path-id 1
+  Path type: internal, path is valid, is best path, no labeled nexthop
+             Imported from 10.0.0.3:32787:[2]:[0]:[0]:[48]:[ee8e.8d13.d95d]:[32]:[10.2.1.1]/272 
+  AS-Path: NONE, path sourced internal to AS
+    10.0.1.101 (metric 81) from 10.0.0.1 (10.0.0.1)
+      Origin IGP, MED not set, localpref 100, weight 0
+      Received label 100020 100998
+      Extcommunity: RT:64500:100020 RT:64500:100998 SOO:10.0.1.101:0 ENCAP:8
+          Router MAC:0200.0a00.0165
+      Originator: 10.0.0.3 Cluster list: 10.0.0.1 
+
+  Path-id 1 not advertised to any peer
+BGP routing table entry for [5]:[0]:[0]:[16]:[10.1.0.0]/224, version 393
 Paths: (2 available, best #1)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not in HW
 
@@ -2484,11 +3410,11 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn, is not i
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
   Path-id 1 not advertised to any peer
-BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 65
+BGP routing table entry for [5]:[0]:[0]:[24]:[10.2.1.0]/224, version 461
 Paths: (6 available, best #6)
 Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.5:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2508,17 +3434,17 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5006.0000.1b08
       Originator: 10.0.0.6 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
              Imported from 10.0.0.8:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
-    10.0.1.6 (metric 81) from 10.0.0.1 (10.0.0.1)
+    10.0.1.6 (metric 41) from 10.0.0.1 (10.0.0.1)
       Origin IGP, MED not set, localpref 100, weight 0
       Received label 100998
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5008.0000.1b08
       Originator: 10.0.0.8 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Weight, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.3:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2528,7 +3454,7 @@ Flags: (0x000002) (high32 00000000) on xmit-list, is not in l2rib/evpn
       Extcommunity: RT:64500:100998 ENCAP:8 Router MAC:5003.0000.1b08
       Originator: 10.0.0.3 Cluster list: 10.0.0.1 
 
-  Path type: internal, path is valid, not best reason: Router Id, no labeled nexthop
+  Path type: internal, path is valid, not best reason: NH metric, no labeled nexthop
              Imported from 10.0.0.4:5:[5]:[0]:[0]:[24]:[10.2.1.0]/224 
   Gateway IP: 0.0.0.0
   AS-Path: NONE, path sourced internal to AS
@@ -2556,7 +3482,7 @@ leaf-5# show bgp evi
 -----------------------------------------------
   L2VNI ID                     : 100010 (L2-100010)
   RD                           : 10.0.0.7:32777
-  Prefixes (local/total)       : 0/4
+  Prefixes (local/total)       : 2/6
   Created                      : Dec 30 04:17:05.457960
   Last Oper Up/Down            : Dec 30 04:17:05.783206 / never
   Enabled                      : Yes
@@ -2568,7 +3494,7 @@ leaf-5# show bgp evi
 -----------------------------------------------
   L2VNI ID                     : 100020 (L2-100020)
   RD                           : 10.0.0.7:32787
-  Prefixes (local/total)       : 0/0
+  Prefixes (local/total)       : 2/6
   Created                      : Dec 30 04:17:05.463951
   Last Oper Up/Down            : Dec 30 04:17:05.783394 / never
   Enabled                      : Yes
@@ -2589,7 +3515,7 @@ leaf-5# show bgp evi
 -----------------------------------------------
   L3VNI ID                     : 100998 (L3-100998)
   RD                           : 10.0.0.7:5
-  Prefixes (local/total)       : 2/7
+  Prefixes (local/total)       : 2/9
   Created                      : Dec 30 04:17:27.982905
   Last Oper Up/Down            : Dec 30 04:17:27.982909 / never
   Enabled                      : Yes
@@ -2625,7 +3551,7 @@ Address-family IPv6 Unicast
 -----------------------------------------------
   L3VNI ID                     : 100999 (L3-100999)
   RD                           : 10.0.0.7:4
-  Prefixes (local/total)       : 2/13
+  Prefixes (local/total)       : 2/16
   Created                      : Dec 30 04:17:27.980853
   Last Oper Up/Down            : Dec 30 04:17:27.980858 / never
   Enabled                      : Yes
@@ -2663,13 +3589,13 @@ leaf-5# show nve peers
 
 Interface Peer-IP                                 State LearnType Uptime   Router-Mac       
 --------- --------------------------------------  ----- --------- -------- -----------------
-nve1      10.0.1.1                                Up    CP        01:16:41 5003.0000.1b08   
-nve1      10.0.1.2                                Up    CP        01:16:41 5004.0000.1b08   
-nve1      10.0.1.3                                Up    CP        01:08:58 5005.0000.1b08   
-nve1      10.0.1.4                                Up    CP        01:08:58 5006.0000.1b08   
-nve1      10.0.1.6                                Up    CP        01:14:46 5008.0000.1b08   
-nve1      10.0.1.101                              Up    CP        01:16:41 0200.0a00.0165   
-nve1      10.0.1.102                              Up    CP        01:08:58 0200.0a00.0166   
+nve1      10.0.1.1                                Up    CP        02:15:11 5003.0000.1b08   
+nve1      10.0.1.2                                Up    CP        02:15:11 5004.0000.1b08   
+nve1      10.0.1.3                                Up    CP        02:07:28 5005.0000.1b08   
+nve1      10.0.1.4                                Up    CP        02:07:28 5006.0000.1b08   
+nve1      10.0.1.6                                Up    CP        02:13:16 5008.0000.1b08   
+nve1      10.0.1.101                              Up    CP        02:15:11 0200.0a00.0165   
+nve1      10.0.1.102                              Up    CP        02:07:28 0200.0a00.0166   
 
 
 leaf-5# show l2route topology detail
@@ -2800,6 +3726,22 @@ Topology    Mac Address    Host IP                                 Prod   Flags 
             Sent To: ARP
             SOO: 808333361      
             encap-type:1
+10          ba95.b91a.fcf9 10.1.1.3                                HMM    L,                 1         Local                                  
+            L3-Info: 100999
+            Sent To: BGP
+            SOO: 808333361      
+20          ee8e.8d13.d95d 10.2.1.1                                BGP    --                 0         10.0.1.101 (Label: 100020)                               
+            Sent To: ARP
+            SOO: 808333361      
+            encap-type:1
+20          5e2f.2af3.1602 10.2.1.2                                BGP    --                 0         10.0.1.102 (Label: 100020)                               
+            Sent To: ARP
+            SOO: 808333361      
+            encap-type:1
+20          96f2.42d3.1a3c 10.2.1.3                                HMM    L,                 0         Local                                  
+            L3-Info: 100998
+            Sent To: BGP
+            SOO: 808333361      
 
 leaf-5# show l2route mac all detail
 
@@ -2823,6 +3765,32 @@ Topology    Mac Address    Prod   Flags              Seq No     Next-Hops
             Encap: 1           
 
 10          ae55.e8c9.b384 BGP    SplRcv             1          10.0.1.101 (Label: 100010)                               
+            Route Resolution Type: Regular
+            Forwarding State: Resolved (PeerID: 2)
+            Sent To: L2FM
+            SOO: 808333361      
+            Encap: 1           
+
+10          ba95.b91a.fcf9 Local  L,                 1          Po2                                                      
+            Route Resolution Type: Regular
+            Forwarding State: Resolved
+            Sent To: BGP
+            SOO: 808333361      
+
+20          5e2f.2af3.1602 BGP    SplRcv             0          10.0.1.102 (Label: 100020)                               
+            Route Resolution Type: Regular
+            Forwarding State: Resolved (PeerID: 6)
+            Sent To: L2FM
+            SOO: 808333361      
+            Encap: 1           
+
+20          96f2.42d3.1a3c Local  L,                 0          Po3                                                      
+            Route Resolution Type: Regular
+            Forwarding State: Resolved
+            Sent To: BGP
+            SOO: 808333361      
+
+20          ee8e.8d13.d95d BGP    SplRcv             0          10.0.1.101 (Label: 100020)                               
             Route Resolution Type: Regular
             Forwarding State: Resolved (PeerID: 2)
             Sent To: L2FM
@@ -2912,8 +3880,12 @@ Flags: + - Adjacencies synced via CFSoE
 
 Ip Address      Age      Mac Address    Vlan Physical-ifindex    Flags    Remote Vtep Addrs
 
-10.1.1.2        00:55:23 1e74.b5ab.a866   10 (null)              R        10.0.1.102  
-10.1.1.1        01:04:28 ae55.e8c9.b384   10 (null)              R        10.0.1.101  
+10.1.1.3        00:05:37 ba95.b91a.fcf9   10 port-channel2       L
+10.1.1.2        00:42:02 1e74.b5ab.a866   10 (null)              R        10.0.1.102  
+10.1.1.1        00:42:47 ae55.e8c9.b384   10 (null)              R        10.0.1.101  
+10.2.1.3        00:10:36 96f2.42d3.1a3c   20 port-channel3       L
+10.2.1.2        00:28:56 5e2f.2af3.1602   20 (null)              R        10.0.1.102  
+10.2.1.1        00:35:40 ee8e.8d13.d95d   20 (null)              R        10.0.1.101  
 
 leaf-5# show ip route vrf all
 
@@ -2924,59 +3896,64 @@ IP Route Table for VRF "default"
 '%<string>' in via output denotes VRF <string>
 
 10.0.0.1/32, ubest/mbest: 1/0
-    *via 10.0.0.1, Eth1/1, [110/41], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/41], 02:17:08, ospf-UNDERLAY, intra
 10.0.0.2/32, ubest/mbest: 1/0
-    *via 10.0.0.2, Eth1/2, [110/41], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/41], 02:17:08, ospf-UNDERLAY, intra
 10.0.0.3/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.0.4/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.0.5/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.0.6/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:12:39, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:12:38, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:11:14, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:11:13, ospf-UNDERLAY, intra
 10.0.0.7/32, ubest/mbest: 2/0, attached
-    *via 10.0.0.7, Lo0, [0/0], 01:21:07, local
-    *via 10.0.0.7, Lo0, [0/0], 01:21:07, direct
-10.0.0.8/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.7, Lo0, [0/0], 02:19:42, local
+    *via 10.0.0.7, Lo0, [0/0], 02:19:42, direct
+10.0.0.8/32, ubest/mbest: 1/0
+    *via 10.0.3.10, Vlan900, [110/41], 00:06:51, ospf-UNDERLAY, intra
 10.0.0.99/32, ubest/mbest: 1/0
-    *via 10.0.0.2, Eth1/2, [110/41], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/41], 02:17:08, ospf-UNDERLAY, intra
 10.0.1.1/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.1.2/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.1.3/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:09:37, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:09:37, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:08:12, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:08:12, ospf-UNDERLAY, intra
 10.0.1.4/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:09:37, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:09:37, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:08:12, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:08:12, ospf-UNDERLAY, intra
 10.0.1.5/32, ubest/mbest: 2/0, attached
-    *via 10.0.1.5, Lo1, [0/0], 01:15:31, local
-    *via 10.0.1.5, Lo1, [0/0], 01:15:31, direct
-10.0.1.6/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:15:31, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:15:31, ospf-UNDERLAY, intra
+    *via 10.0.1.5, Lo1, [0/0], 02:14:06, local
+    *via 10.0.1.5, Lo1, [0/0], 02:14:06, direct
+10.0.1.6/32, ubest/mbest: 1/0
+    *via 10.0.3.10, Vlan900, [110/41], 00:06:51, ospf-UNDERLAY, intra
 10.0.1.101/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:17:08, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:17:08, ospf-UNDERLAY, intra
 10.0.1.102/32, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/81], 01:09:37, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/81], 01:09:37, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/81], 02:08:12, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/81], 02:08:12, ospf-UNDERLAY, intra
 10.0.1.103/32, ubest/mbest: 2/0, attached
-    *via 10.0.1.103, Lo1, [0/0], 01:15:31, local
-    *via 10.0.1.103, Lo1, [0/0], 01:15:31, direct
+    *via 10.0.1.103, Lo1, [0/0], 02:14:06, local
+    *via 10.0.1.103, Lo1, [0/0], 02:14:06, direct
 10.0.3.0/30, ubest/mbest: 2/0
-    *via 10.0.0.1, Eth1/1, [110/120], 01:18:33, ospf-UNDERLAY, intra
-    *via 10.0.0.2, Eth1/2, [110/120], 01:18:33, ospf-UNDERLAY, intra
+    *via 10.0.0.1, Eth1/1, [110/120], 00:04:06, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/120], 00:04:06, ospf-UNDERLAY, intra
+10.0.3.4/30, ubest/mbest: 2/0
+    *via 10.0.0.1, Eth1/1, [110/120], 00:07:21, ospf-UNDERLAY, intra
+    *via 10.0.0.2, Eth1/2, [110/120], 00:07:21, ospf-UNDERLAY, intra
+10.0.3.8/30, ubest/mbest: 1/0, attached
+    *via 10.0.3.9, Vlan900, [0/0], 00:07:05, direct
+10.0.3.9/32, ubest/mbest: 1/0, attached
+    *via 10.0.3.9, Vlan900, [0/0], 00:07:05, local
 
 IP Route Table for VRF "OVERLAY-TENANT1"
 '*' denotes best ucast next-hop
@@ -2985,34 +3962,42 @@ IP Route Table for VRF "OVERLAY-TENANT1"
 '%<string>' in via output denotes VRF <string>
 
 0.0.0.0/0, ubest/mbest: 2/0
-    *via 10.0.1.3%default, [200/0], 00:20:40, bgp-64500, internal, tag 64520, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
+    *via 10.0.1.3%default, [200/0], 00:42:48, bgp-64500, internal, tag 64520, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
  
-    *via 10.0.1.4%default, [200/0], 00:20:40, bgp-64500, internal, tag 64520, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
+    *via 10.0.1.4%default, [200/0], 00:42:48, bgp-64500, internal, tag 64520, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
  
 10.1.0.0/16, ubest/mbest: 2/0
-    *via 10.0.1.3%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
+    *via 10.0.1.3%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
  
-    *via 10.0.1.4%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
+    *via 10.0.1.4%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
  
 10.1.1.0/24, ubest/mbest: 1/0, attached
-    *via 10.1.1.254, Vlan10, [0/0], 01:18:08, direct
+    *via 10.1.1.254, Vlan10, [0/0], 02:16:43, direct
 10.1.1.1/32, ubest/mbest: 1/0
-    *via 10.0.1.101%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000165 encap: VXLAN
+    *via 10.0.1.101%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000165 encap: VXLAN
  
 10.1.1.2/32, ubest/mbest: 1/0
-    *via 10.0.1.102%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000166 encap: VXLAN
+    *via 10.0.1.102%default, [200/0], 00:42:05, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000166 encap: VXLAN
  
+10.1.1.3/32, ubest/mbest: 1/0, attached
+    *via 10.1.1.3, Vlan10, [190/0], 00:43:09, hmm
 10.1.1.254/32, ubest/mbest: 1/0, attached
-    *via 10.1.1.254, Vlan10, [0/0], 01:18:08, local
+    *via 10.1.1.254, Vlan10, [0/0], 02:16:43, local
 10.2.0.0/16, ubest/mbest: 2/0
-    *via 10.0.1.3%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
+    *via 10.0.1.3%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
  
-    *via 10.0.1.4%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
+    *via 10.0.1.4%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
  
 10.2.1.0/24, ubest/mbest: 2/0
-    *via 10.0.1.3%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
+    *via 10.0.1.3%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
  
-    *via 10.0.1.4%default, [200/0], 00:20:40, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
+    *via 10.0.1.4%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000104 encap: VXLAN
+ 
+10.2.1.1/32, ubest/mbest: 1/0
+    *via 10.0.1.3%default, [200/0], 00:35:43, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
+ 
+10.2.1.3/32, ubest/mbest: 1/0
+    *via 10.0.1.3%default, [200/0], 00:35:38, bgp-64500, internal, tag 64500, segid: 100999 tunnelid: 0xa000103 encap: VXLAN
  
 
 IP Route Table for VRF "OVERLAY-TENANT2"
@@ -3022,12 +4007,20 @@ IP Route Table for VRF "OVERLAY-TENANT2"
 '%<string>' in via output denotes VRF <string>
 
 10.1.0.0/16, ubest/mbest: 1/0
-    *via 10.0.1.3%default, [200/0], 01:09:33, bgp-64500, internal, tag 64500, segid: 100998 tunnelid: 0xa000103 encap: VXLAN
+    *via 10.0.1.3%default, [200/0], 00:42:48, bgp-64500, internal, tag 64500, segid: 100998 tunnelid: 0xa000103 encap: VXLAN
  
 10.2.1.0/24, ubest/mbest: 1/0, attached
-    *via 10.2.1.254, Vlan20, [0/0], 01:18:08, direct
+    *via 10.2.1.254, Vlan20, [0/0], 02:16:43, direct
+10.2.1.1/32, ubest/mbest: 1/0
+    *via 10.0.1.101%default, [200/0], 00:35:43, bgp-64500, internal, tag 64500, segid: 100998 tunnelid: 0xa000165 encap: VXLAN
+ 
+10.2.1.2/32, ubest/mbest: 1/0
+    *via 10.0.1.102%default, [200/0], 00:28:59, bgp-64500, internal, tag 64500, segid: 100998 tunnelid: 0xa000166 encap: VXLAN
+ 
+10.2.1.3/32, ubest/mbest: 1/0, attached
+    *via 10.2.1.3, Vlan20, [190/0], 00:35:42, hmm
 10.2.1.254/32, ubest/mbest: 1/0, attached
-    *via 10.2.1.254, Vlan20, [0/0], 01:18:08, local
+    *via 10.2.1.254, Vlan20, [0/0], 02:16:43, local
 
 IP Route Table for VRF "PEERKEEPALIVE"
 '*' denotes best ucast next-hop
@@ -3036,9 +4029,9 @@ IP Route Table for VRF "PEERKEEPALIVE"
 '%<string>' in via output denotes VRF <string>
 
 172.16.0.4/31, ubest/mbest: 1/0, attached
-    *via 172.16.0.4, Eth1/5, [0/0], 01:18:39, direct
+    *via 172.16.0.4, Eth1/5, [0/0], 02:17:14, direct
 172.16.0.4/32, ubest/mbest: 1/0, attached
-    *via 172.16.0.4, Eth1/5, [0/0], 01:18:39, local
+    *via 172.16.0.4, Eth1/5, [0/0], 02:17:14, local
 
 IP Route Table for VRF "egress-loadbalance-resolution-"
 '*' denotes best ucast next-hop
@@ -3060,11 +4053,14 @@ Flags: * - Adjacencies learnt on non-active FHRP router
        D - Static Adjacencies attached to down interface
 
 IP ARP Table for all contexts
-Total number of entries: 3
+Total number of entries: 6
 Address         Age       MAC Address     Interface       Flags
-10.0.0.1        00:02:24  5001.0000.1b08  Ethernet1/1              
-10.0.0.2        00:03:14  5002.0000.1b08  Ethernet1/2              
-172.16.0.5      00:03:40  5008.0000.1b08  Ethernet1/5              
+10.2.1.3        00:10:41  96f2.42d3.1a3c  Vlan20          +        
+10.1.1.3        00:05:42  ba95.b91a.fcf9  Vlan10                   
+10.0.0.1        00:04:43  5001.0000.1b08  Ethernet1/1              
+10.0.0.2        00:05:34  5002.0000.1b08  Ethernet1/2              
+172.16.0.5      00:06:00  5008.0000.1b08  Ethernet1/5              
+10.0.3.10       00:06:58  5008.0000.1b08  Vlan900                  
 
 leaf-5# show mac address-table
 
@@ -3077,30 +4073,36 @@ Legend:
 ---------+-----------------+--------+---------+------+----+------------------
 C   10     1e74.b5ab.a866   dynamic  NA         F      F    nve1(10.0.1.102)
 C   10     ae55.e8c9.b384   dynamic  NA         F      F    nve1(10.0.1.101)
++   10     ba95.b91a.fcf9   dynamic  NA         F      F    Po2
+C   20     5e2f.2af3.1602   dynamic  NA         F      F    nve1(10.0.1.102)
++   20     96f2.42d3.1a3c   dynamic  NA         F      F    Po3
+C   20     ee8e.8d13.d95d   dynamic  NA         F      F    nve1(10.0.1.101)
 *  998     0200.0a00.0165   static   -         F      F    nve1(10.0.1.101)
 *  998     0200.0a00.0166   static   -         F      F    nve1(10.0.1.102)
 *  998     0200.0a00.0167   static   -         F      F    Vlan998
 *  998     5003.0000.1b08   static   -         F      F    nve1(10.0.1.1)
-*  998     5004.0000.1b08   static   -         F      F    nve1
+*  998     5004.0000.1b08   static   -         F      F    nve1(10.0.1.2)
 *  998     5005.0000.1b08   static   -         F      F    nve1(10.0.1.3)
-*  998     5006.0000.1b08   static   -         F      F    nve1
+*  998     5006.0000.1b08   static   -         F      F    nve1(10.0.1.4)
 *  998     5007.0000.1b08   static   -         F      F    Vlan998
 *  999     0200.0a00.0165   static   -         F      F    nve1(10.0.1.101)
 *  999     0200.0a00.0166   static   -         F      F    nve1(10.0.1.102)
 *  999     0200.0a00.0167   static   -         F      F    Vlan999
 *  999     5003.0000.1b08   static   -         F      F    nve1(10.0.1.1)
-*  999     5004.0000.1b08   static   -         F      F    nve1
+*  999     5004.0000.1b08   static   -         F      F    nve1(10.0.1.2)
 *  999     5005.0000.1b08   static   -         F      F    nve1(10.0.1.3)
-*  999     5006.0000.1b08   static   -         F      F    nve1
+*  999     5006.0000.1b08   static   -         F      F    nve1(10.0.1.4)
 *  999     5007.0000.1b08   static   -         F      F    Vlan999
 G    -     0200.0a00.0167   static   -         F      F    sup-eth1(R)
 G    -     5007.0000.1b08   static   -         F      F    sup-eth1(R)
 G   10     5007.0000.1b08   static   -         F      F    sup-eth1(R)
 G   20     5007.0000.1b08   static   -         F      F    sup-eth1(R)
+G  900     5007.0000.1b08   static   -         F      F    sup-eth1(R)
 G  998     5007.0000.1b08   static   -         F      F    sup-eth1(R)
 G  999     5007.0000.1b08   static   -         F      F    sup-eth1(R)
 G   10     5008.0000.1b08   static   -         F      F    vPC Peer-Link(R)
 G   20     5008.0000.1b08   static   -         F      F    vPC Peer-Link(R)
+G  900     5008.0000.1b08   static   -         F      F    vPC Peer-Link(R)
 G  998     5008.0000.1b08   static   -         F      F    vPC Peer-Link(R)
 G  999     5008.0000.1b08   static   -         F      F    vPC Peer-Link(R)
 G    -     aaaa.bbbb.cccc   static   -         F      F    sup-eth1(R)
