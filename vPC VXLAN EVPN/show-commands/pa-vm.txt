@@ -1,0 +1,414 @@
+admin@PA-VM> show system info | match model\|hostname\|sw-version
+hostname: PA-VM
+model: PA-VM
+sw-version: 11.1.4-h7
+admin@PA-VM> show interface all
+
+total configured hardware interfaces: 4
+
+name                    id    speed/duplex/state            mac address       
+--------------------------------------------------------------------------------
+ethernet1/1             16    1000/full/up                  ba:db:ee:fb:ad:30 
+ethernet1/2             17    1000/full/up                  ba:db:ee:fb:ad:30 
+ethernet1/3             18    1000/full/up                  50:00:00:0f:00:03 
+ae1                     48    [n/a]/[n/a]/up                ba:db:ee:fb:ad:30 
+
+aggregation groups: 1
+ae1 members:
+  ethernet1/1 ethernet1/2 
+
+
+total configured logical interfaces: 3
+
+name                      id    vsys zone             forwarding               tag    address                                         
+------------------- ----- ---- ---------------- ------------------------ ------ ------------------
+ethernet1/3               18    1    Untrust          vr:default               0      192.168.0.100/24  
+ae1                       48    1                     N/A                      0      N/A               
+ae1.3260                  256   1    Fabric-Transit   vr:default               3260   10.32.60.3/29     
+
+admin@PA-VM> show lacp aggregate-ethernet all
+
+LACP:
+
+**********************************************************************************
+AE group: ae1
+Members:                Bndl Rx state       Mux state  Sel state
+  ethernet1/1           yes  Current        Tx_Rx      Selected
+  ethernet1/2           yes  Current        Tx_Rx      Selected
+Status:           Enabled
+Mode:             Passive
+Rate:             Slow
+Max-port:         8
+Min-link-port:    0
+Min-local-bias-port: 0
+Fast-failover:    Disabled
+Pre-negotiation:  Disabled
+Local:            System Priority: 32768
+                  System MAC:      ba:db:ee:fb:ad:01
+                  Key:             48
+Partner:          System Priority: 32667
+                  System MAC:      00:23:04:ee:be:c8
+                  Key:             32772
+Port State
+--------------------------------------------------------------------------------
+Interface                       Port                                
+                    Number Priority  Mode    Rate  Key      State
+--------------------------------------------------------------------------------
+ethernet1/1          16     32768    Passive Slow  48       0x3C
+Partner              264    32768    Active  Slow  32772    0x3D
+
+ethernet1/2          17     32768    Passive Slow  48       0x3C
+Partner              16648  32768    Active  Slow  32772    0x3D
+
+Port Counters
+--------------------------------------------------------------------------------
+Interface               LACPDUs         Marker      Marker Response       Error        
+                    Sent     Recv     Sent Recv     Sent     Recv     Unknown  Illegal 
+--------------------------------------------------------------------------------
+ethernet1/1          156      138      0    0        0        0        0        0       
+ethernet1/2          168      168      0    0        0        0        0        0       
+
+admin@PA-VM> show routing route
+
+flags: A:active, ?:loose, C:connect, H:host, S:static, ~:internal, R:rip, O:ospf, B:bgp, 
+       Oi:ospf intra-area, Oo:ospf inter-area, O1:ospf ext-type-1, O2:ospf ext-type-2, E:ecmp, M:multicast
+
+  
+VIRTUAL ROUTER: default (id 1)
+  ==========
+destination                                 nexthop                                 metric flags      age   interface          next-AS    
+0.0.0.0/0                                   192.168.0.1                             10     A S              ethernet1/3                   
+10.1.0.0/16                                 10.32.60.1                                     A?B E      3516                     64500      
+10.1.0.0/16                                 10.32.60.2                                     A?B E      3516                     64500      
+10.1.1.0/24                                 10.32.60.1                                     A?B E      3516                     64500      
+10.1.1.0/24                                 10.32.60.2                                     A?B E      3516                     64500      
+10.2.0.0/16                                 10.32.60.1                                     A?B E      3516                     64500      
+10.2.0.0/16                                 10.32.60.2                                     A?B E      3516                     64500      
+10.2.1.0/24                                 10.32.60.1                                     A?B E      3516                     64500      
+10.2.1.0/24                                 10.32.60.2                                     A?B E      3516                     64500      
+10.32.60.0/29                               10.32.60.3                              0      A C              ae1.3260                      
+10.32.60.3/32                               0.0.0.0                                 0      A H                                            
+192.168.0.0/24                              192.168.0.100                           0      A C              ethernet1/3                   
+192.168.0.100/32                            0.0.0.0                                 0      A H                                            
+total routes shown: 13
+
+admin@PA-VM> show routing protocol bgp summary
+
+  ==========
+  router id:                     10.32.60.3
+  virtual router:                default
+  reject default route:          yes
+  redist default route:          allow
+  Install BGP routes:            yes
+  Graceful Restart:              supported
+  AS size:                       2
+  Local AS:                      64520
+  Local member AS:               0
+  Cluster id:                    0.0.0.0
+  Default local preference:      100
+  Always compare MED:            no
+  Aggregate regardless MED:      yes
+  Deterministic MED processing:  yes
+  Accept ORF:                    no
+  Accept CISCO style prefix:     yes
+  mp-bgp-enable:                 yes
+  afi-safi-ipv4-unicast:         yes
+  rib-out entries:               current 2, peak 2 
+    peer LEAF-3:                 AS 64500, Established, IP 10.32.60.1
+      bgpAfiIpv4/unicast pfx:    Accepted pfx: 4, Advertised pfx: 1
+    peer LEAF-4:                 AS 64500, Established, IP 10.32.60.2
+      bgpAfiIpv4/unicast pfx:    Accepted pfx: 4, Advertised pfx: 1
+
+admin@PA-VM> show routing protocol bgp peer
+
+  ==========
+  Peer:                          LEAF-3 (id 1)
+  virtual router:                default
+  Peer router id:                10.32.60.1
+  Remote AS:                     64500
+  Peer group:                    Fabric (id 1)
+  Peer status:                   Established, for 3525 seconds
+  Password set:                  no
+  Passive:                       no
+  Multi-hop TTL:                 1
+  Remote Address:                10.32.60.1:40734
+  Local Address:                 10.32.60.3:179
+  (R) reflector client:          not-client
+  same confederation:            no
+  send aggr confed as-path:      yes
+  peering type:                  Unspecified
+  Connect-Retry interval:        15
+  Open Delay:                    0
+  Idle Hold:                     15
+  Prefix limit:                  5000
+  Holdtime:                      90 (config 90)
+  Keep-Alive interval:           30 (config 30)
+  Update messages:               in       21, out        8
+  Total messages:                in      175, out      197
+  Last update age:               0
+  Last error:                    HoldTimer expired (4)
+  Flap counts:                   96, established 4 times
+  (R) ORF entries:               0
+  Nexthop set to self:           yes
+  use 3rd party as next-hop:     no
+  override nexthop to peer:      no
+  ----------
+  remove private AS number:      no
+  ----------
+  Capability:                    Multiprotocol Extensions(1)  value: IPv4 Unicast
+  Capability:                    Route Refresh(yes)
+  Capability:                    Extended Next Hop Encoding(5)  value: 000100010002000100800002
+  Capability:                    Graceful Restart(64)  value: 007800010100
+  Capability:                    4-Byte AS Number(65)  value: 64500
+  Capability:                    Deprecated(yes)
+  Capability:                    Dynamic Capability(67)  value: 020140
+  Capability:                    Route Refresh (Cisco)(yes)
+  ----------
+  Prefix counter for:            bgpAfiIpv4 / unicast
+  Incoming Prefix:               Accepted 4, Rejected 0, Policy Rej 0, Total 4
+  Outgoing Prefix:               1
+  Advertised Prefix:             1
+  ==========
+  Peer:                          LEAF-4 (id 2)
+  virtual router:                default
+  Peer router id:                10.32.60.2
+  Remote AS:                     64500
+  Peer group:                    Fabric (id 1)
+  Peer status:                   Established, for 4865 seconds
+  Password set:                  no
+  Passive:                       no
+  Multi-hop TTL:                 1
+  Remote Address:                10.32.60.2:179
+  Local Address:                 10.32.60.3:32973
+  (R) reflector client:          not-client
+  same confederation:            no
+  send aggr confed as-path:      yes
+  peering type:                  Unspecified
+  Connect-Retry interval:        15
+  Open Delay:                    0
+  Idle Hold:                     15
+  Prefix limit:                  5000
+  Holdtime:                      90 (config 90)
+  Keep-Alive interval:           30 (config 30)
+  Update messages:               in       13, out        2
+  Total messages:                in      177, out      189
+  Last update age:               26
+  Last error:                    
+  Flap counts:                   19, established 1 times
+  (R) ORF entries:               0
+  Nexthop set to self:           yes
+  use 3rd party as next-hop:     no
+  override nexthop to peer:      no
+  ----------
+  remove private AS number:      no
+  ----------
+  Capability:                    Multiprotocol Extensions(1)  value: IPv4 Unicast
+  Capability:                    Route Refresh(yes)
+  Capability:                    Extended Next Hop Encoding(5)  value: 000100010002000100800002
+  Capability:                    Graceful Restart(64)  value: 007800010100
+  Capability:                    4-Byte AS Number(65)  value: 64500
+  Capability:                    Deprecated(yes)
+  Capability:                    Dynamic Capability(67)  value: 020140
+  Capability:                    Route Refresh (Cisco)(yes)
+  ----------
+  Prefix counter for:            bgpAfiIpv4 / unicast
+  Incoming Prefix:               Accepted 4, Rejected 0, Policy Rej 0, Total 4
+  Outgoing Prefix:               1
+  Advertised Prefix:             1
+
+admin@PA-VM> show routing protocol bgp loc-rib
+
+  
+VIRTUAL ROUTER: default (id 1)
+  ==========
+  Prefix             Nexthop          Peer       Weight   LocPrf Org      MED flap AS-Path
+ *10.1.0.0/16        10.32.60.1       LEAF-3          0      100 igp        0    0 64500
+ *10.1.1.0/24        10.32.60.1       LEAF-3          0      100 igp        0    0 64500
+ *10.2.0.0/16        10.32.60.1       LEAF-3          0      100 igp        0    0 64500
+ *10.2.1.0/24        10.32.60.1       LEAF-3          0      100 igp        0    0 64500
+ =10.1.0.0/16        10.32.60.2       LEAF-4          0      100 igp        0    0 64500
+ =10.1.1.0/24        10.32.60.2       LEAF-4          0      100 igp        0    0 64500
+ =10.2.0.0/16        10.32.60.2       LEAF-4          0      100 igp        0    0 64500
+ =10.2.1.0/24        10.32.60.2       LEAF-4          0      100 igp        0    0 64500
+ *0.0.0.0/0          192.168.0.1      Local           0      100 i/c        0    0 
+
+total routes shown: 9
+
+admin@PA-VM> show routing protocol bgp loc-rib-detail
+
+  
+VIRTUAL ROUTER: default (id 1)
+  ==========
+  ----------
+  Prefix:                        10.1.0.0/16 *
+  Nexthop:                       10.32.60.1
+  Received from:                 Peer LEAF-3 (id 1)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              yes
+  Aggregator AS:                 64500
+  Aggregator ID:                 10.2.1.254
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.1.1.0/24 *
+  Nexthop:                       10.32.60.1
+  Received from:                 Peer LEAF-3 (id 1)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.2.0.0/16 *
+  Nexthop:                       10.32.60.1
+  Received from:                 Peer LEAF-3 (id 1)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              yes
+  Aggregator AS:                 64500
+  Aggregator ID:                 10.1.1.254
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.2.1.0/24 *
+  Nexthop:                       10.32.60.1
+  Received from:                 Peer LEAF-3 (id 1)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.1.0.0/16 =
+  Nexthop:                       10.32.60.2
+  Received from:                 Peer LEAF-4 (id 2)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              yes
+  Aggregator AS:                 64500
+  Aggregator ID:                 10.2.1.254
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.1.1.0/24 =
+  Nexthop:                       10.32.60.2
+  Received from:                 Peer LEAF-4 (id 2)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.2.0.0/16 =
+  Nexthop:                       10.32.60.2
+  Received from:                 Peer LEAF-4 (id 2)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              yes
+  Aggregator AS:                 64500
+  Aggregator ID:                 10.1.1.254
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        10.2.1.0/24 =
+  Nexthop:                       10.32.60.2
+  Received from:                 Peer LEAF-4 (id 2)
+  Originator ID:                 0.0.0.0
+  AS Path:                       64500
+  Weight:                        0
+  Origin:                        igp
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  Flap:                          value 0.00, count 0
+  ----------
+  Prefix:                        0.0.0.0/0 *
+  Nexthop:                       192.168.0.1
+  Received from:                 Local
+  Originator ID:                 0.0.0.0
+  AS Path:                       
+  Weight:                        0
+  Origin:                        i/c
+  MED:                           0
+  Local Preference:              100
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  Flap:                          value 0.00, count 0
+
+total routes shown: 9
+
+admin@PA-VM> show routing protocol bgp rib-out
+
+  
+VIRTUAL ROUTER: default (id 1)
+  ==========
+  Prefix             Nexthop          Peer       Originator       Adv Status  Aggr Status     AS-Path
+ 0.0.0.0/0           10.32.60.3       LEAF-3     0.0.0.0          advertised  no aggregation  64520
+ 0.0.0.0/0           10.32.60.3       LEAF-4     0.0.0.0          advertised  no aggregation  64520
+
+total routes shown: 2
+
+admin@PA-VM> show routing protocol bgp rib-out-detail
+
+  
+VIRTUAL ROUTER: default (id 1)
+  ==========
+  ----------
+  Prefix:                        0.0.0.0/0
+  Nexthop:                       10.32.60.3
+  Peer:                          LEAF-3 (id 1)
+  Advertise status:              advertised
+  Aggregation status:            no aggregate
+  Originator ID:                 0.0.0.0
+  AS Path:                       64520
+  Origin:                        N/A
+  MED:                           0
+  Local Preference:              0
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
+  ----------
+  Prefix:                        0.0.0.0/0
+  Nexthop:                       10.32.60.3
+  Peer:                          LEAF-4 (id 2)
+  Advertise status:              advertised
+  Aggregation status:            no aggregate
+  Originator ID:                 0.0.0.0
+  AS Path:                       64520
+  Origin:                        N/A
+  MED:                           0
+  Local Preference:              0
+  Atomic aggregate:              no
+  Aggregator AS:                 0
+  Aggregator ID:                 0.0.0.0
