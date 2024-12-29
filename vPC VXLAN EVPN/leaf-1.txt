@@ -64,7 +64,6 @@ vpc domain 100
   peer-gateway
   ip arp synchronize
 
-
 interface Vlan1
   no ip redirects
   no ipv6 redirects
