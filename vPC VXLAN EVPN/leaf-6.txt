@@ -217,6 +217,7 @@ router bgp 64500
     address-family ipv4 unicast
       network 10.1.1.0/24
       maximum-paths ibgp 2
+      maximum-paths ibgp 2
   vrf OVERLAY-TENANT2
     address-family ipv4 unicast
       network 10.2.1.0/24

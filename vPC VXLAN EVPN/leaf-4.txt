@@ -67,6 +67,7 @@ vrf context OVERLAY-TENANT2
     route-target import 64500:100555
     route-target import 64500:100999
     route-target import 64500:100999 evpn
+    import vrf advertise-vpn
 vrf context PEERKEEPALIVE
 vrf context external
   vni 100555
@@ -271,6 +272,7 @@ router bgp 64500
     address-family ipv4 unicast
       network 10.2.1.0/24
       aggregate-address 10.1.0.0/16
+      maximum-paths ibgp 2
   vrf external
     neighbor 10.32.60.3
       remote-as 64520
