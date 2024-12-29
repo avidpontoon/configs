@@ -33,7 +33,7 @@ rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
 fabric forwarding anycast-gateway-mac aaaa.bbbb.cccc
 ip pim rp-address 10.0.0.99 group-list 224.0.0.0/4
 ip pim ssm range 232.0.0.0/8
-vlan 1,10,20,555,998-999,3260
+vlan 1,10,20,555,900,998-999,3260
 vlan 10
   vn-segment 100010
 vlan 20
@@ -79,6 +79,7 @@ vrf context external
     route-target import 64500:100999
     route-target import 64500:100999 evpn
 vrf context management
+system nve infra-vlans 900
 vpc domain 200
   peer-switch
   peer-keepalive destination 172.16.0.2 source 172.16.0.3 vrf PEERKEEPALIVE
@@ -113,6 +114,14 @@ interface Vlan555
   no ip redirects
   ip forward
   no ipv6 redirects
+
+interface Vlan900
+  no shutdown
+  no ip redirects
+  ip address 10.0.3.6/30
+  no ipv6 redirects
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
 
 interface Vlan998
   no shutdown
