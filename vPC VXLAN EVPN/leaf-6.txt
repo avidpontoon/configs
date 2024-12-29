@@ -1,0 +1,232 @@
+version 10.3(5) Bios:version  
+hostname leaf-6
+vdc leaf-6 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+cfs eth distribute
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature fabric forwarding
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature vpc
+feature nv overlay
+
+no password strength-check
+ip domain-lookup
+copp profile strict
+hardware access-list tcam region racl 512
+hardware access-list tcam region arp-ether 256 double-wide
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+fabric forwarding anycast-gateway-mac aaaa.bbbb.cccc
+ip pim rp-address 10.0.0.99 group-list 224.0.0.0/4
+ip pim ssm range 232.0.0.0/8
+vlan 1,10,20,900,998-999
+vlan 10
+  vn-segment 100010
+vlan 20
+  vn-segment 100020
+vlan 998
+  vn-segment 100998
+vlan 999
+  vn-segment 100999
+
+vrf context OVERLAY-TENANT1
+  vni 100999
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+vrf context OVERLAY-TENANT2
+  vni 100998
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+vrf context PEERKEEPALIVE
+vrf context management
+system nve infra-vlans 900
+vpc domain 300
+  peer-switch
+  peer-keepalive destination 172.16.0.4 source 172.16.0.5 vrf PEERKEEPALIVE
+  peer-gateway
+  ip arp synchronize
+
+interface Vlan1
+  no ip redirects
+  no ipv6 redirects
+
+interface Vlan10
+  no shutdown
+  vrf member OVERLAY-TENANT1
+  no ip redirects
+  ip address 10.1.1.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+
+interface Vlan20
+  no shutdown
+  vrf member OVERLAY-TENANT2
+  no ip redirects
+  ip address 10.2.1.254/24
+  no ipv6 redirects
+  fabric forwarding mode anycast-gateway
+
+interface Vlan900
+  no shutdown
+  no ip redirects
+  ip address 10.0.3.10/30
+  no ipv6 redirects
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+
+interface Vlan998
+  no shutdown
+  vrf member OVERLAY-TENANT2
+  no ip redirects
+  ip forward
+  no ipv6 redirects
+
+interface Vlan999
+  no shutdown
+  vrf member OVERLAY-TENANT1
+  no ip redirects
+  ip forward
+  no ipv6 redirects
+
+interface port-channel1
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+
+interface port-channel2
+  switchport access vlan 10
+  vpc 2
+
+interface port-channel3
+  switchport access vlan 20
+  vpc 3
+
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  advertise virtual-rmac
+  source-interface loopback1
+  member vni 100010
+    suppress-arp
+    mcast-group 224.1.1.192
+  member vni 100020
+    suppress-arp
+    mcast-group 224.1.1.192
+  member vni 100998 associate-vrf
+  member vni 100999 associate-vrf
+
+interface Ethernet1/1
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet1/2
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet1/3
+  switchport mode trunk
+  channel-group 1 mode active
+
+interface Ethernet1/4
+  switchport mode trunk
+  channel-group 1 mode active
+
+interface Ethernet1/5
+  no switchport
+  vrf member PEERKEEPALIVE
+  ip address 172.16.0.5/31
+  no shutdown
+
+interface Ethernet1/6
+  switchport access vlan 10
+  channel-group 2 mode active
+
+interface Ethernet1/7
+  switchport access vlan 20
+  channel-group 3 mode active
+
+interface mgmt0
+  vrf member management
+
+interface loopback0
+  ip address 10.0.0.8/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback1
+  ip address 10.0.1.6/32
+  ip address 10.0.1.103/32 secondary
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+icam monitor scale
+
+cli alias name wr copy run start
+line console
+line vty
+boot nxos bootflash:/nxos64-cs.10.3.5.M.bin 
+router ospf UNDERLAY
+  log-adjacency-changes
+router bgp 64500
+  log-neighbor-changes
+  address-family ipv4 unicast
+  address-family l2vpn evpn
+    advertise-pip
+  template peer SPINE
+    remote-as 64500
+    update-source loopback0
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      soft-reconfiguration inbound
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+  neighbor 10.0.0.1
+    inherit peer SPINE
+  neighbor 10.0.0.2
+    inherit peer SPINE
+  vrf OVERLAY-TENANT1
+    address-family ipv4 unicast
+      network 10.1.1.0/24
+      maximum-paths ibgp 2
+      maximum-paths ibgp 2
+  vrf OVERLAY-TENANT2
+    address-family ipv4 unicast
+      network 10.2.1.0/24
+evpn
+  vni 100010 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 100020 l2
+    rd auto
+    route-target import auto
+    route-target export auto
