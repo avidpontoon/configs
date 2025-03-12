@@ -1,0 +1,129 @@
+version 10.3(5) Bios:version  
+hostname DC1-SPINE2
+vdc DC1-SPINE2 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature fabric forwarding
+feature interface-vlan
+feature vn-segment-vlan-based
+feature nv overlay
+
+no password strength-check
+ip domain-lookup
+copp profile strict
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+ip pim rp-address 10.0.0.98 group-list 224.0.0.0/4
+ip pim ssm range 232.0.0.0/8
+ip pim anycast-rp 10.0.0.98 10.0.0.5
+ip pim anycast-rp 10.0.0.98 10.0.0.6
+vlan 1
+
+vrf context management
+
+interface Vlan1
+
+interface Ethernet1/1
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet1/2
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet1/3
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.1.1.6/30
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet1/4
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.1.1.14/30
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+
+interface mgmt0
+  vrf member management
+
+interface loopback0
+  ip address 10.0.0.6/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback1
+  ip address 10.0.0.98/32
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+icam monitor scale
+
+line console
+line vty
+boot nxos bootflash:/nxos64-cs.10.3.5.M.bin 
+router ospf UNDERLAY
+  log-adjacency-changes
+router bgp 100
+  address-family ipv4 unicast
+  address-family l2vpn evpn
+  template peer CORE
+    remote-as 100
+    update-source loopback0
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      route-reflector-client
+  template peer LEAF
+    remote-as 100
+    update-source loopback0
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      route-reflector-client
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      route-reflector-client
+  neighbor 10.0.0.1
+    inherit peer CORE
+  neighbor 10.0.0.2
+    inherit peer CORE
+  neighbor 10.0.0.9
+    inherit peer LEAF
+  neighbor 10.0.0.10
+    inherit peer LEAF

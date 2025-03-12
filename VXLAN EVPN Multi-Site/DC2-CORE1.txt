@@ -1,0 +1,191 @@
+version 10.3(5) Bios:version  
+hostname DC2-CORE1
+vdc DC2-CORE1 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature fabric forwarding
+feature interface-vlan
+feature vn-segment-vlan-based
+feature nv overlay
+evpn multisite border-gateway 200
+  delay-restore time 100
+
+no password strength-check
+ip domain-lookup
+copp profile strict
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+
+vlan 1,998-1001
+vlan 998
+  vn-segment 900102
+vlan 999
+  vn-segment 900101
+vlan 1000
+  vn-segment 2001000
+vlan 1001
+  vn-segment 2001001
+
+route-map RMAP-REDIST-DIRECT permit 10
+vrf context management
+vrf context tenant-1
+  vni 900101
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+vrf context tenant-2
+  vni 900102
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+
+
+interface Vlan1
+
+interface Vlan998
+  no shutdown
+  vrf member tenant-2
+  ip forward
+
+interface Vlan999
+  no shutdown
+  vrf member tenant-1
+  ip forward
+
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  source-interface loopback0
+  multisite border-gateway interface loopback100
+  member vni 900101 associate-vrf
+  member vni 900102 associate-vrf
+  member vni 2001000
+    multisite ingress-replication
+    ingress-replication protocol bgp
+  member vni 2001001
+    multisite ingress-replication
+    ingress-replication protocol bgp
+
+interface Ethernet1/1
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.100.100.2/30
+  no shutdown
+  evpn multisite dci-tracking
+
+interface Ethernet1/2
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.99.99.5/30
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  no shutdown
+  evpn multisite fabric-tracking
+
+interface Ethernet1/3
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.2.2.1/30
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  no shutdown
+  evpn multisite fabric-tracking
+
+interface Ethernet1/4
+  no switchport
+  mtu 9216
+  medium p2p
+  ip address 10.2.2.5/30
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  no shutdown
+  evpn multisite fabric-tracking
+
+interface mgmt0
+  vrf member management
+
+interface loopback0
+  ip address 10.0.0.3/32
+  ip router ospf UNDERLAY area 0.0.0.0
+
+interface loopback100
+  ip address 10.222.222.1/32
+  ip router ospf UNDERLAY area 0.0.0.0
+icam monitor scale
+
+line console
+line vty
+boot nxos bootflash:/nxos64-cs.10.3.5.M.bin 
+router ospf UNDERLAY
+  log-adjacency-changes
+router bgp 200
+  address-family ipv4 unicast
+    redistribute direct route-map RMAP-REDIST-DIRECT
+  template peer DC1-CORE
+    remote-as 100
+    update-source loopback0
+    ebgp-multihop 5
+    peer-type fabric-external
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      rewrite-evpn-rt-asn
+  template peer SPINE
+    remote-as 200
+    update-source loopback0
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      rewrite-evpn-rt-asn
+  neighbor 10.0.0.1
+    inherit peer DC1-CORE
+  neighbor 10.0.0.2
+    inherit peer DC1-CORE
+  neighbor 10.0.0.4
+    remote-as 200
+    update-source loopback0
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+  neighbor 10.0.0.7
+    inherit peer SPINE
+  neighbor 10.0.0.8
+    inherit peer SPINE
+  neighbor 10.100.100.1
+    remote-as 100
+    update-source Ethernet1/1
+    address-family ipv4 unicast
+evpn
+  vni 2001000 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+  vni 2001001 l2
+    rd auto
+    route-target import auto
+    route-target export auto
